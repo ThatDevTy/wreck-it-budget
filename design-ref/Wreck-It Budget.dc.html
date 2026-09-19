@@ -1,0 +1,1135 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+
+<helmet data-dc-atomics>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+<script src="./image-slot.js"></script>
+<style>
+body{margin:0;background:#0a0710;font-family:system-ui,-apple-system,sans-serif}
+@keyframes blinkMarquee{0%,100%{opacity:1}50%{opacity:.35}}
+@keyframes scanlineMove{0%{background-position:0 0}100%{background-position:0 8px}}
+@keyframes buildUp{0%{transform:scaleY(0);opacity:0}100%{transform:scaleY(1);opacity:1}}
+@keyframes popFloat{0%{transform:translateY(0);opacity:1}100%{transform:translateY(-46px);opacity:0}}
+@keyframes shakeScreen{0%,100%{transform:translate(0,0)}20%{transform:translate(-4px,2px)}40%{transform:translate(4px,-2px)}60%{transform:translate(-3px,1px)}80%{transform:translate(3px,-1px)}}
+@keyframes windup{0%{transform:rotate(0)}50%{transform:rotate(-22deg)}100%{transform:rotate(10deg)}}
+@keyframes dustExpand{0%{transform:scale(.2);opacity:.9}100%{transform:scale(2.6);opacity:0}}
+@keyframes walkOff{0%{transform:translateX(0);opacity:1}100%{transform:translateX(120px);opacity:0}}
+@keyframes wreckerFall{0%{transform:translateY(-280px)}80%{transform:translateY(6px)}100%{transform:translateY(0)}}
+@keyframes towerSmush{0%{transform:scaleY(1);opacity:1}55%{transform:scaleY(.2) translateY(8%);opacity:1}100%{transform:scaleY(.03);opacity:0}}
+@keyframes signPop{0%{transform:translateY(24px) scale(.5);opacity:0}70%{transform:translateY(-6px) scale(1.1);opacity:1}100%{transform:translateY(0) scale(1);opacity:1}}
+@keyframes centerFadeIn{0%{opacity:0;transform:translate(-50%,-50%) scale(.7)}100%{opacity:1;transform:translate(-50%,-50%) scale(1)}}
+@keyframes riseFromRubble{0%{transform:translate(-50%,20px);opacity:0}100%{transform:translate(-50%,-14px);opacity:1}}
+@keyframes flamePulse{0%,100%{transform:scale(1)}50%{transform:scale(1.18)}}
+@keyframes countBlink{0%,100%{opacity:1}50%{opacity:.5}}
+@keyframes fixerWalk{0%{transform:translateX(30px) scaleX(-1)}100%{transform:translateX(0) scaleX(-1)}}
+@keyframes racerWalk{0%{transform:translateX(-24px)}100%{transform:translateX(0)}}
+@keyframes switchSpark{0%,100%{opacity:0;transform:scale(.6)}50%{opacity:1;transform:scale(1.3)}}
+@keyframes chargeGrow{0%{transform:scale(.7);opacity:0}60%{transform:scale(1.15);opacity:1}100%{transform:scale(1);opacity:1}}
+@keyframes otherStamp{0%{transform:scale(1.8) rotate(-10deg);opacity:0}60%{transform:scale(.9) rotate(4deg);opacity:1}100%{transform:scale(1) rotate(0);opacity:1}}
+@keyframes buildingHit{0%,75%{transform:translateX(0);filter:brightness(1)}80%{transform:translateX(-4px);filter:brightness(1.6)}85%{transform:translateX(4px);filter:brightness(1.6)}90%{transform:translateX(-3px);filter:brightness(1.2)}100%{transform:translateX(0);filter:brightness(1)}}
+@keyframes windowFlicker{0%{opacity:.2}30%{opacity:1}45%{opacity:.3}60%{opacity:1}100%{opacity:1}}
+@keyframes lightUp{0%{background:#241c10;box-shadow:none}45%{background:#fff3c4;box-shadow:0 0 14px 5px rgba(255,227,150,.95)}100%{background:#ffd36e;box-shadow:0 0 9px 3px rgba(255,211,110,.65)}}
+</style>
+</helmet>
+
+<div style="min-height:100vh;background:#0a0710;display:flex;flex-direction:column;align-items:center;gap:18px;padding:28px 16px 60px;box-sizing:border-box">
+
+  <div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:center;max-width:480px">
+    <button onClick="{{ jumpWizard }}" style="font:11px system-ui;background:#1c1428;color:#c9b8ff;border:1px solid #3a2a54;border-radius:6px;padding:7px 11px;cursor:pointer">Setup Wizard</button>
+    <button onClick="{{ jumpDashboard }}" style="font:11px system-ui;background:#1c1428;color:#c9b8ff;border:1px solid #3a2a54;border-radius:6px;padding:7px 11px;cursor:pointer">Dashboard</button>
+    <button onClick="{{ jumpTowerDownDemo }}" style="font:11px system-ui;background:#2a1418;color:#ff9a7a;border:1px solid #5a2a2a;border-radius:6px;padding:7px 11px;cursor:pointer">▶ Tower Down Demo</button>
+    <button onClick="{{ jumpLog }}" style="font:11px system-ui;background:#1c1428;color:#c9b8ff;border:1px solid #3a2a54;border-radius:6px;padding:7px 11px;cursor:pointer">Log Form</button>
+    <button onClick="{{ jumpTrend }}" style="font:11px system-ui;background:#1c1428;color:#c9b8ff;border:1px solid #3a2a54;border-radius:6px;padding:7px 11px;cursor:pointer">Trend</button>
+    <button onClick="{{ jumpAddDebt }}" style="font:11px system-ui;background:#1c1428;color:#c9b8ff;border:1px solid #3a2a54;border-radius:6px;padding:7px 11px;cursor:pointer">Add Bill/Debt</button>
+    <button onClick="{{ toggleOrientation }}" style="font:11px system-ui;background:#14201c;color:#8ef0c0;border:1px solid #2a4a3a;border-radius:6px;padding:7px 11px;cursor:pointer">⤾ Rotate</button>
+  </div>
+
+  <div style="width:{{ phoneW }}px;height:{{ phoneH }}px;background:#171018;border-radius:44px;box-shadow:0 30px 70px rgba(0,0,0,.6),0 0 0 2px #2a1f2e inset;padding:14px;box-sizing:border-box;position:relative;flex:none">
+    <div style="position:absolute;top:22px;left:50%;transform:translateX(-50%);width:60px;height:6px;background:#0a0710;border-radius:4px;z-index:5"></div>
+    <div style="width:100%;height:100%;background:#100a16;border-radius:32px;overflow:hidden;position:relative">
+
+      <div style="position:absolute;inset:0;background:repeating-linear-gradient(0deg,rgba(255,255,255,.05) 0px,rgba(255,255,255,.05) 1px,transparent 1px,transparent 4px);pointer-events:none;z-index:50;mix-blend-mode:overlay;animation:scanlineMove 0.6s linear infinite"></div>
+
+      <div style="position:absolute;inset:0;display:flex;flex-direction:column;animation:{{ shakeAnim }}">
+
+        <sc-if value="{{ isDashboard }}" hint-placeholder-val="{{ true }}">
+          <div style="flex:1;display:flex;flex-direction:column;overflow-y:auto;background:#100a16">
+            <div style="padding:14px 16px 10px;background:linear-gradient(180deg,#1c1024,#100a16);border-bottom:2px solid #2f1f3a;flex:none">
+              <div style="display:flex;align-items:center;justify-content:space-between">
+                <div style="font-family:'Press Start 2P';font-size:12px;color:#ffd36e;letter-spacing:1px;text-shadow:0 0 8px rgba(255,211,110,.6)">WRECK-IT BUDGET</div>
+                <div style="display:flex;gap:4px">
+                  <div style="width:6px;height:6px;border-radius:50%;background:#ff5a4d;animation:blinkMarquee 1.1s infinite"></div>
+                  <div style="width:6px;height:6px;border-radius:50%;background:#ffd36e;animation:blinkMarquee 1.1s infinite .2s"></div>
+                  <div style="width:6px;height:6px;border-radius:50%;background:#6ee0a8;animation:blinkMarquee 1.1s infinite .4s"></div>
+                </div>
+              </div>
+            </div>
+
+            <div style="padding:16px;display:flex;flex-direction:column;gap:16px">
+
+              <div style="background:{{ scorePanelBg }};border:2px solid {{ scorePanelBorder }};border-radius:10px;padding:14px;position:relative">
+                <div style="display:flex;justify-content:space-between;align-items:flex-start">
+                  <div style="font:10px system-ui;letter-spacing:1.5px;color:rgba(255,255,255,.55);text-transform:uppercase">Family Score</div>
+                  <div style="font:9px system-ui;font-weight:700;letter-spacing:.5px;background:{{ scoreTagBg }};color:{{ scoreTagColor }};padding:3px 8px;border-radius:4px">{{ scoreTagText }}</div>
+                </div>
+                <div style="font-family:'Press Start 2P';font-size:34px;color:{{ scoreDigitColor }};margin:6px 0 2px;text-shadow:0 0 12px {{ scoreDigitColor }}">{{ scoreDisplayText }}</div>
+                <div style="font:8.5px system-ui;color:rgba(255,255,255,.4);margin-bottom:8px">Income − Bills − Min. Debt Payments</div>
+                <div style="display:flex;align-items:center;gap:6px;margin-bottom:10px">
+                  <div style="font-size:16px;animation:flamePulse 1.4s infinite">{{ streakIcon }}</div>
+                  <div style="font:10px system-ui;color:rgba(255,255,255,.6)">{{ streakLabel }}</div>
+                </div>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;border-top:1px solid rgba(255,255,255,.1);padding-top:10px">
+                  <div style="font:10px system-ui;color:rgba(255,255,255,.5)">Income <span style="display:block;font-size:13px;color:#fff;margin-top:2px">{{ incomeFmt }}</span></div>
+                  <div style="font:10px system-ui;color:rgba(255,255,255,.5)">Bills <span style="display:block;font-size:13px;color:#fff;margin-top:2px">{{ billsFmt }}</span></div>
+                  <div style="font:10px system-ui;color:rgba(255,255,255,.5)">Min. Debt <span style="display:block;font-size:13px;color:#fff;margin-top:2px">{{ minsFmt }}</span></div>
+                  <div style="font:10px system-ui;color:rgba(255,255,255,.5)">Total Debt <span style="display:block;font-size:13px;color:#fff;margin-top:2px">{{ totalDebtFmt }}</span></div>
+                </div>
+                <div style="margin-top:10px;font:10px system-ui;color:rgba(255,255,255,.55)">Debt-free by <b style="color:#fff">{{ debtFreeDate }}</b> · ~{{ totalInterestFmt }} interest</div>
+              </div>
+
+              <div style="background:#150c1c;border:1px solid #2a1c36;border-radius:10px;padding:10px 12px;display:flex;gap:10px;align-items:flex-start">
+                <img src="assets/char-racer.png?v=2" style="width:34px;height:34px;flex:none;border-radius:8px;image-rendering:pixelated"/>
+                <div style="background:#1b2530;border-radius:8px;padding:7px 9px;font:10.5px system-ui;color:#cfe8f0;line-height:1.4;position:relative">{{ racerMessage }}</div>
+              </div>
+
+              <div>
+                <div style="font:10px system-ui;letter-spacing:1.5px;color:rgba(255,255,255,.5);text-transform:uppercase;margin-bottom:8px">Debt Towers</div>
+                <div style="display:flex;gap:0;align-items:flex-end;background:linear-gradient(180deg,#181022,#221530);border-radius:10px;padding:14px 4px 0;position:relative;min-height:340px;overflow-x:auto;overflow-y:visible">
+                  <div style="position:absolute;left:0;bottom:0;height:16px;width:100%;background:#0e0812;border-top:2px solid #2a1c36;z-index:0"></div>
+                  <div style="position:sticky;left:8px;align-self:flex-end;z-index:2;flex:none;margin-bottom:74px">
+                    <img src="assets/char-wrecker.png?v=3" style="width:48px;height:48px;image-rendering:pixelated"/>
+                  </div>
+                  <sc-for list="{{ debtsView }}" as="d" hint-placeholder-count="0">
+                    <div style="width:72px;flex:none;display:flex;flex-direction:column;align-items:center;position:relative;z-index:1;padding-bottom:74px">
+                      <sc-if value="{{ d.isTarget }}" hint-placeholder-val="{{ false }}">
+                        <div style="position:absolute;top:-28px;font:8px 'Press Start 2P';color:#ffd36e;background:#3a2510;border:1px solid #6b4a1c;border-radius:4px;padding:3px 5px;white-space:nowrap;text-shadow:0 0 6px rgba(255,211,110,.7)">TARGET</div>
+                        <div style="position:absolute;bottom:{{ d.heightPx }}px;width:100px;height:100px;border-radius:50%;background:radial-gradient(circle,rgba(255,211,110,.25),transparent 70%);animation:flamePulse 1.6s infinite"></div>
+                      </sc-if>
+                      <sc-if value="{{ d.cleared }}" hint-placeholder-val="{{ false }}">
+                        <div style="width:72px;height:80px;position:relative;display:flex;align-items:flex-end;justify-content:center">
+                          <div style="display:flex;flex-direction:column;align-items:center">
+                            <img src="assets/tile_0042.png" style="width:26px;height:auto;image-rendering:pixelated;display:block"/>
+                            <img src="assets/tile_0058.png" style="width:26px;height:auto;image-rendering:pixelated;display:block"/>
+                            <img src="assets/tile_0074.png" style="width:26px;height:auto;image-rendering:pixelated;display:block"/>
+                          </div>
+                        </div>
+                      </sc-if>
+                      <sc-if value="{{ d.showBuilding }}" hint-placeholder-val="{{ true }}">
+                        <div style="width:72px;height:{{ d.heightPx }}px;position:relative;transition:height .6s ease-out;transform-origin:bottom;background:{{ d.color }};border:2px solid rgba(0,0,0,.55);border-radius:5px 5px 0 0;box-shadow:inset 0 0 0 2px rgba(255,255,255,.1);overflow:hidden">
+                          <div style="position:absolute;top:0;left:0;right:0;height:7px;background:rgba(0,0,0,.28)"></div>
+                          <div style="position:absolute;inset:11px 8px 6px;display:grid;grid-template-columns:repeat(2,1fr);grid-template-rows:repeat(5,1fr);gap:{{ d.windowGap }}px 7px">
+                            <sc-for list="{{ d.windows }}" as="w" hint-placeholder-count="10">
+                              <div style="background:{{ w.color }};border-radius:{{ d.windowRadius }}px"></div>
+                            </sc-for>
+                          </div>
+                        </div>
+                      </sc-if>
+                      <div style="font:9px system-ui;color:#e8ddf0;margin-top:6px;text-align:center;line-height:1.25;max-width:82px">{{ d.name }}<span style="display:block;color:rgba(255,255,255,.5);font-size:8.5px">{{ d.balanceFmt }}</span></div>
+                    </div>
+                  </sc-for>
+                </div>
+              </div>
+
+              <div style="display:flex;gap:10px">
+                <div style="flex:1">
+                  <div style="font:10px system-ui;letter-spacing:1.5px;color:rgba(255,255,255,.5);text-transform:uppercase;margin-bottom:8px">Priority Order</div>
+                  <div style="display:flex;flex-direction:column;gap:6px">
+                    <sc-for list="{{ priorityListView }}" as="d" hint-placeholder-count="3">
+                      <div draggable="true" onDragStart="{{ d.onDragStart }}" onDragOver="{{ preventDefaultFn }}" onDrop="{{ d.onDrop }}" style="display:flex;align-items:center;gap:8px;background:#160f1e;border:1px solid #2a1c36;border-radius:7px;padding:7px 9px;cursor:grab">
+                        <div style="width:5px;height:5px;background:{{ d.color }};border-radius:50%"></div>
+                        <div style="font:8px 'Press Start 2P';color:rgba(255,255,255,.4);width:14px">{{ d.priority }}</div>
+                        <div style="flex:1;font:10.5px system-ui;color:#e8ddf0">{{ d.name }}</div>
+                        <div style="display:flex;gap:2px">
+                          <button onClick="{{ d.moveUp }}" style="width:20px;height:20px;background:#221530;border:1px solid #3a2a54;color:#c9b8ff;border-radius:4px;font-size:10px;cursor:pointer">▲</button>
+                          <button onClick="{{ d.moveDown }}" style="width:20px;height:20px;background:#221530;border:1px solid #3a2a54;color:#c9b8ff;border-radius:4px;font-size:10px;cursor:pointer">▼</button>
+                        </div>
+                      </div>
+                    </sc-for>
+                  </div>
+                </div>
+              </div>
+
+              <div>
+                <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px">
+                  <div style="font:10px system-ui;letter-spacing:1.5px;color:rgba(255,255,255,.5);text-transform:uppercase">Bill House</div>
+                  <button onClick="{{ simulateMonthReset }}" style="background:none;border:none;color:rgba(255,255,255,.35);font:8px system-ui;cursor:pointer">🌙 simulate month-end reset</button>
+                </div>
+                <div style="background:linear-gradient(180deg,#181022,#100a16);border-radius:10px;padding:52px 12px 0;display:flex;flex-direction:column;align-items:center;position:relative;overflow:visible">
+                  <div style="position:relative;display:flex;align-items:flex-end;gap:14px">
+                    <div style="width:112px;background:#d8cba8;border:2px solid rgba(0,0,0,.55);border-radius:0 0 6px 6px;position:relative;z-index:1;padding:16px 10px 12px;box-shadow:inset 0 0 0 2px rgba(255,255,255,.15)">
+                      <div style="position:absolute;bottom:100%;left:-6px;right:-6px;height:26px;background:#5a7488;clip-path:polygon(50% 0,100% 100%,0 100%);border:2px solid rgba(0,0,0,.5);z-index:2"></div>
+                      <div style="display:grid;grid-template-columns:repeat(5,16px);gap:5px 10px;justify-content:center;margin-bottom:26px">
+                        <sc-for list="{{ houseWindows }}" as="w" hint-placeholder-count="3">
+                          <div title="{{ w.title }}" style="width:20px;height:20px;background:{{ w.color }};border:1px solid rgba(0,0,0,.4);border-radius:2px;box-shadow:{{ w.glow }}, inset 0 0 0 1px rgba(255,255,255,.12);animation:{{ w.flicker }}"></div>
+                        </sc-for>
+                      </div>
+                      <div style="position:absolute;bottom:0;left:50%;transform:translateX(-50%);width:22px;height:26px;background:#5a4a38;border-radius:3px 3px 0 0"></div>
+                    </div>
+                    <sc-if value="{{ fixerVisible }}" hint-placeholder-val="{{ false }}">
+                      <div style="transform:translateX({{ fixerX }}px) {{ fixerFlipTransform }};transition:transform .9s ease-out;flex:none">
+                        <img src="assets/char-fixer.png?v=3" style="width:36px;height:36px;image-rendering:pixelated"/>
+                      </div>
+                    </sc-if>
+                  </div>
+                  <div style="height:12px;width:100%;background:#0e0812;border-top:2px solid #2a1c36;margin-top:10px"></div>
+                </div>
+                <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:8px">
+                  <sc-for list="{{ billsView }}" as="b" hint-placeholder-count="3">
+                    <div style="display:flex;align-items:center;gap:5px;background:#150c1c;border-radius:6px;padding:5px 8px">
+                      <div style="width:7px;height:7px;border-radius:1px;background:{{ b.dotColor }}"></div>
+                      <div style="font:9.5px system-ui;color:#e8ddf0">{{ b.name }}<span style="color:rgba(255,255,255,.45)"> · {{ b.amountFmt }}</span></div>
+                      <sc-if value="{{ b.hasStreak }}" hint-placeholder-val="{{ false }}"><div style="font:8px system-ui;color:#ffd36e">{{ b.streakIcon }}{{ b.streak }}</div></sc-if>
+                    </div>
+                  </sc-for>
+                </div>
+              </div>
+
+              <div style="display:flex;gap:10px">
+                <button onClick="{{ jumpLog }}" style="flex:1;background:#c0392b;color:#fff;border:none;border-radius:8px;padding:12px;font:11px 'Press Start 2P';cursor:pointer;box-shadow:0 3px 0 #7a2419">LOG SPENDING</button>
+                <button onClick="{{ captureSnapshot }}" style="background:#221530;color:#c9b8ff;border:1px solid #3a2a54;border-radius:8px;padding:12px 14px;font:9px system-ui;cursor:pointer">📸 Capture</button>
+              </div>
+
+              <button onClick="{{ jumpTrend }}" style="background:#150c1c;border:1px solid #2a1c36;border-radius:10px;padding:10px 12px;text-align:left;color:#c9b8ff;font:10.5px system-ui;cursor:pointer">📈 View Month-Over-Month Trend →</button>
+
+              <div>
+                <div style="font:10px system-ui;letter-spacing:1.5px;color:rgba(255,255,255,.5);text-transform:uppercase;margin-bottom:8px">Recent Activity</div>
+                <div style="display:flex;flex-direction:column;gap:6px">
+                  <sc-for list="{{ activityView }}" as="a" hint-placeholder-count="4">
+                    <div style="display:flex;align-items:center;gap:8px;background:#150c1c;border-radius:7px;padding:7px 9px">
+                      <div style="font-size:13px">{{ a.icon }}</div>
+                      <div style="flex:1;font:10px system-ui;color:#e8ddf0">{{ a.label }}<span style="display:block;color:rgba(255,255,255,.45);font-size:8.5px">{{ a.who }} · {{ a.time }}</span></div>
+                      <div style="font:10.5px system-ui;color:#ff8a7a;font-weight:600">-{{ a.amountFmt }}</div>
+                    </div>
+                  </sc-for>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ isWizard }}" hint-placeholder-val="{{ false }}">
+          <div style="flex:1;display:flex;flex-direction:column;background:#100a16;overflow-y:auto">
+            <div style="padding:14px 16px 10px;background:linear-gradient(180deg,#1c1024,#100a16);border-bottom:2px solid #2f1f3a;flex:none">
+              <div style="display:flex;align-items:center;justify-content:space-between">
+                <div style="font-family:'Press Start 2P';font-size:12px;color:#ffd36e;letter-spacing:1px;text-shadow:0 0 8px rgba(255,211,110,.6);white-space:nowrap;display:flex;align-items:center;gap:6px">PLAYER SETUP<span style="width:8px;height:12px;background:#ffd36e;animation:flamePulse 1s steps(2) infinite"></span></div>
+                <div style="display:flex;gap:4px">
+                  <div style="width:6px;height:6px;border-radius:50%;background:#ff5a4d;animation:blinkMarquee 1.1s infinite"></div>
+                  <div style="width:6px;height:6px;border-radius:50%;background:#ffd36e;animation:blinkMarquee 1.1s infinite .2s"></div>
+                  <div style="width:6px;height:6px;border-radius:50%;background:#6ee0a8;animation:blinkMarquee 1.1s infinite .4s"></div>
+                </div>
+              </div>
+              <div style="font:10px system-ui;color:rgba(255,255,255,.5);margin-top:8px">Add your income, bills, and debts. Edit anytime later.</div>
+            </div>
+
+            <div style="padding:14px 16px 24px;display:flex;flex-direction:column;gap:16px">
+              <div style="background:#150c1c;border:2px solid #2a1c36;border-radius:10px;padding:12px">
+                <div style="display:flex;align-items:center;gap:7px;margin-bottom:10px"><div style="width:9px;height:9px;background:#8ef0c0;box-shadow:0 0 6px rgba(142,240,192,.7)"></div><div style="font:9px 'Press Start 2P';color:#8ef0c0;letter-spacing:.5px;text-shadow:0 0 6px rgba(142,240,192,.5)">INCOME</div></div>
+                <div style="display:flex;flex-direction:column;gap:6px;margin-bottom:10px">
+                  <sc-for list="{{ incomeView }}" as="inc" hint-placeholder-count="0">
+                    <div style="display:flex;align-items:center;gap:8px;background:#160f1e;border-radius:6px;padding:8px 10px">
+                      <div style="width:8px;height:8px;border-radius:2px;background:#8ef0c0;flex:none"></div>
+                      <div style="flex:1;font:11px system-ui;color:#e8ddf0">{{ inc.name }}<span style="color:rgba(255,255,255,.4)"> · {{ inc.owner }} · {{ inc.amountFmt }}/{{ inc.payType }}</span></div>
+                      <button onClick="{{ inc.remove }}" style="background:none;border:none;color:rgba(255,255,255,.35);font-size:13px;cursor:pointer">✕</button>
+                    </div>
+                  </sc-for>
+                </div>
+                <input value="{{ newIncome.name }}" onChange="{{ setNewIncomeName }}" placeholder="Income name (e.g. Salary)" style="width:100%;box-sizing:border-box;background:#160f1e;border:1px solid #2a1c36;border-radius:7px;padding:10px;color:#fff;font:12px system-ui;margin-bottom:8px"/>
+                <div style="display:flex;gap:8px;margin-bottom:8px">
+                  <select value="{{ newIncome.owner }}" onChange="{{ setNewIncomeOwner }}" style="flex:1;background:#160f1e;border:1px solid #2a1c36;border-radius:7px;padding:10px;color:#fff;font:12px system-ui"><option value="me">Me</option><option value="spouse">Spouse</option></select>
+                  <select value="{{ newIncome.payType }}" onChange="{{ setNewIncomePayType }}" style="flex:1;background:#160f1e;border:1px solid #2a1c36;border-radius:7px;padding:10px;color:#fff;font:12px system-ui"><option value="twice_monthly">Twice monthly</option><option value="weekly">Weekly</option></select>
+                </div>
+                <input value="{{ newIncome.amount }}" onChange="{{ setNewIncomeAmount }}" placeholder="Amount per check" type="number" style="width:100%;box-sizing:border-box;background:#160f1e;border:1px solid #2a1c36;border-radius:7px;padding:10px;color:#fff;font:12px system-ui;margin-bottom:8px"/>
+                <button onClick="{{ addIncome }}" style="width:100%;background:#2a4a3a;color:#8ef0c0;border:1px solid #3a6a52;border-radius:7px;padding:10px;font:10px 'Press Start 2P';letter-spacing:.5px;cursor:pointer">ADD INCOME</button>
+              </div>
+
+              <div style="background:#150c1c;border:2px solid #2a1c36;border-radius:10px;padding:12px">
+                <div style="display:flex;align-items:center;gap:7px;margin-bottom:10px"><div style="width:9px;height:9px;background:#8ec0f0;box-shadow:0 0 6px rgba(142,192,240,.7)"></div><div style="font:9px 'Press Start 2P';color:#8ec0f0;letter-spacing:.5px;text-shadow:0 0 6px rgba(142,192,240,.5)">BILLS</div></div>
+                <div style="display:flex;flex-direction:column;gap:6px;margin-bottom:10px">
+                  <sc-for list="{{ setupBillsView }}" as="b" hint-placeholder-count="0">
+                    <div style="display:flex;align-items:center;gap:8px;background:#160f1e;border-radius:6px;padding:8px 10px">
+                      <div style="width:8px;height:8px;border-radius:2px;background:#8ec0f0;flex:none"></div>
+                      <div style="flex:1;font:11px system-ui;color:#e8ddf0">{{ b.name }}<span style="color:rgba(255,255,255,.4)"> · {{ b.amountFmt }}/{{ b.cycle }}</span></div>
+                      <button onClick="{{ b.remove }}" style="background:none;border:none;color:rgba(255,255,255,.35);font-size:13px;cursor:pointer">✕</button>
+                    </div>
+                  </sc-for>
+                </div>
+                <input value="{{ newBill.name }}" onChange="{{ setNewBillName }}" placeholder="Bill name (e.g. Electric)" style="width:100%;box-sizing:border-box;background:#160f1e;border:1px solid #2a1c36;border-radius:7px;padding:10px;color:#fff;font:12px system-ui;margin-bottom:8px"/>
+                <div style="display:flex;gap:8px;margin-bottom:8px">
+                  <input value="{{ newBill.amount }}" onChange="{{ setNewBillAmount }}" placeholder="Amount due" type="number" style="flex:1;background:#160f1e;border:1px solid #2a1c36;border-radius:7px;padding:10px;color:#fff;font:12px system-ui"/>
+                  <input value="{{ newBill.dueDay }}" onChange="{{ setNewBillDueDay }}" placeholder="Due day" type="number" style="flex:1;background:#160f1e;border:1px solid #2a1c36;border-radius:7px;padding:10px;color:#fff;font:12px system-ui"/>
+                </div>
+                <select value="{{ newBill.cycle }}" onChange="{{ setNewBillCycle }}" style="width:100%;box-sizing:border-box;background:#160f1e;border:1px solid #2a1c36;border-radius:7px;padding:10px;color:#fff;font:12px system-ui;margin-bottom:8px"><option value="monthly">Monthly</option><option value="weekly">Weekly</option><option value="yearly">Yearly</option></select>
+                <button onClick="{{ addBill }}" style="width:100%;background:#2a3a4a;color:#8ec0f0;border:1px solid #3a5a72;border-radius:7px;padding:10px;font:10px 'Press Start 2P';letter-spacing:.5px;cursor:pointer">ADD BILL</button>
+              </div>
+
+              <div style="background:#150c1c;border:2px solid #2a1c36;border-radius:10px;padding:12px">
+                <div style="display:flex;align-items:center;gap:7px;margin-bottom:10px"><div style="width:9px;height:9px;background:#f0a08e;box-shadow:0 0 6px rgba(240,160,142,.7)"></div><div style="font:9px 'Press Start 2P';color:#f0a08e;letter-spacing:.5px;text-shadow:0 0 6px rgba(240,160,142,.5)">DEBTS</div></div>
+                <div style="display:flex;flex-direction:column;gap:6px;margin-bottom:10px">
+                  <sc-for list="{{ setupDebtsView }}" as="d" hint-placeholder-count="0">
+                    <div style="display:flex;align-items:center;gap:8px;background:#160f1e;border-radius:6px;padding:8px 10px">
+                      <div style="width:8px;height:8px;border-radius:2px;background:{{ d.color }};flex:none"></div>
+                      <div style="flex:1;font:11px system-ui;color:#e8ddf0">{{ d.name }}<span style="color:rgba(255,255,255,.4)"> · {{ d.balanceFmt }} · min {{ d.minFmt }}</span></div>
+                      <button onClick="{{ d.remove }}" style="background:none;border:none;color:rgba(255,255,255,.35);font-size:13px;cursor:pointer">✕</button>
+                    </div>
+                  </sc-for>
+                </div>
+                <input value="{{ newDebt.name }}" onChange="{{ setNewDebtName }}" placeholder="Debt name (e.g. Credit Card)" style="width:100%;box-sizing:border-box;background:#160f1e;border:1px solid #2a1c36;border-radius:7px;padding:10px;color:#fff;font:12px system-ui;margin-bottom:8px"/>
+                <div style="display:flex;gap:8px;margin-bottom:8px">
+                  <input value="{{ newDebt.balance }}" onChange="{{ setNewDebtBalance }}" placeholder="Balance" type="number" style="flex:1;background:#160f1e;border:1px solid #2a1c36;border-radius:7px;padding:10px;color:#fff;font:12px system-ui"/>
+                  <input value="{{ newDebt.minPayment }}" onChange="{{ setNewDebtMin }}" placeholder="Min. payment" type="number" style="flex:1;background:#160f1e;border:1px solid #2a1c36;border-radius:7px;padding:10px;color:#fff;font:12px system-ui"/>
+                </div>
+                <input value="{{ newDebt.rate }}" onChange="{{ setNewDebtRate }}" placeholder="APR %" type="number" style="width:100%;box-sizing:border-box;background:#160f1e;border:1px solid #2a1c36;border-radius:7px;padding:10px;color:#fff;font:12px system-ui;margin-bottom:8px"/>
+                <button onClick="{{ addDebt }}" style="width:100%;background:#4a2a2a;color:#f0a08e;border:1px solid #6a3a3a;border-radius:7px;padding:10px;font:10px 'Press Start 2P';letter-spacing:.5px;cursor:pointer">ADD DEBT</button>
+              </div>
+
+              <button onClick="{{ finishSetup }}" style="background:#c0392b;color:#fff;border:none;border-radius:8px;padding:13px;font:12px 'Press Start 2P';cursor:pointer;letter-spacing:1px;box-shadow:0 0 14px rgba(192,57,43,.55)">FINISH SETUP</button>
+            </div>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ isLog }}" hint-placeholder-val="{{ false }}">
+          <div style="flex:1;display:flex;flex-direction:column;background:#100a16;overflow-y:auto">
+            <div style="padding:16px 16px 8px;flex:none;display:flex;align-items:center;gap:8px">
+              <button onClick="{{ jumpDashboard }}" style="background:none;border:none;color:#c9b8ff;font-size:14px;cursor:pointer">←</button>
+              <div style="font-family:'Press Start 2P';font-size:12px;color:#ffd36e">LOG ENTRY</div>
+            </div>
+
+            <div style="padding:6px 16px 10px;flex:none">
+              <div style="height:{{ stageHeight }}px;transition:height .35s ease-out;background:linear-gradient(180deg,#181022,#100a16);border:2px solid #2a1c36;border-radius:10px;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden">
+                <sc-if value="{{ logStageIdle }}" hint-placeholder-val="{{ true }}">
+                  <sc-if value="{{ logPreviewIsBill }}" hint-placeholder-val="{{ false }}">
+                    <div style="width:78px;position:relative;padding-top:28px">
+                      <div style="position:absolute;top:0;left:-8px;right:-8px;height:28px;background:#5a7488;clip-path:polygon(50% 0,100% 100%,0 100%);border:2px solid rgba(0,0,0,.5);z-index:2"></div>
+                      <div style="background:#d8cba8;border:2px solid rgba(0,0,0,.55);border-radius:0 0 5px 5px;padding:10px 9px 8px;position:relative;z-index:1">
+                        <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:3px;max-width:52px">
+                          <sc-for list="{{ logPreviewWindows }}" as="w" hint-placeholder-count="4"><div style="width:9px;height:9px;background:{{ w.color }};border:1px solid rgba(0,0,0,.4);border-radius:1px;box-shadow:{{ w.glow }};animation:{{ w.flicker }}"></div></sc-for>
+                        </div>
+                        <div style="width:14px;height:16px;background:#5a4a38;border-radius:2px 2px 0 0;margin:8px auto 0"></div>
+                        <div style="position:absolute;right:-9px;top:50%;transform:translateY(-50%);width:6px;height:16px;background:#241c10;border:1px solid rgba(0,0,0,.6);border-radius:3px">
+                          <div style="position:absolute;left:1px;width:2px;height:2px;border-radius:50%;transition:top .3s ease-out;top:{{ billSwitchDotTop }};background:{{ billSwitchDotColor }}"></div>
+                        </div>
+                      </div>
+                    </div>
+                  </sc-if>
+                  <sc-if value="{{ logPreviewNotBill }}" hint-placeholder-val="{{ true }}">
+                    <div style="width:64px;height:{{ logPreviewHeight }}px;background:{{ logPreviewColor }};border:2px solid rgba(0,0,0,.5);border-radius:4px 4px 0 0;position:relative;overflow:hidden">
+                      <div style="position:absolute;top:0;left:0;right:0;height:6px;background:rgba(0,0,0,.28)"></div>
+                      <div style="position:absolute;inset:9px 6px 4px;display:grid;grid-template-columns:repeat(2,1fr);grid-template-rows:repeat(5,1fr);gap:3px 5px">
+                        <sc-for list="{{ debtPreviewWindows }}" as="w" hint-placeholder-count="10"><div style="background:{{ w.color }};border-radius:1px"></div></sc-for>
+                      </div>
+                    </div>
+                  </sc-if>
+                </sc-if>
+                <sc-if value="{{ animActorIsWrecker }}" hint-placeholder-val="{{ false }}">
+                  <div style="width:64px;height:{{ logPreviewHeight }}px;background:{{ logPreviewColor }};border:2px solid rgba(0,0,0,.5);border-radius:4px 4px 0 0;position:relative;overflow:hidden;animation:{{ buildingHitAnim }}">
+                    <div style="position:absolute;top:0;left:0;right:0;height:6px;background:rgba(0,0,0,.28)"></div>
+                    <div style="position:absolute;inset:9px 6px 4px;display:grid;grid-template-columns:repeat(2,1fr);grid-template-rows:repeat(5,1fr);gap:3px 5px">
+                      <sc-for list="{{ debtPreviewWindows }}" as="w" hint-placeholder-count="10"><div style="background:{{ w.color }};border-radius:1px"></div></sc-for>
+                    </div>
+                  </div>
+                  <div style="position:absolute;bottom:8px;left:calc(50% + 36px);transform-origin:bottom;animation:{{ wreckerAnimCss }}">
+                    <img src="assets/char-wrecker.png?v=3" style="width:80px;height:80px;image-rendering:pixelated;transform:scaleX(-1)"/>
+                  </div>
+                </sc-if>
+                <sc-if value="{{ animActorIsFixer }}" hint-placeholder-val="{{ false }}">
+                  <div style="width:78px;position:relative;padding-top:28px">
+                    <div style="position:absolute;top:0;left:-8px;right:-8px;height:28px;background:#5a7488;clip-path:polygon(50% 0,100% 100%,0 100%);border:2px solid rgba(0,0,0,.5);z-index:2"></div>
+                    <div style="background:#d8cba8;border:2px solid rgba(0,0,0,.55);border-radius:0 0 5px 5px;padding:10px 9px 8px;position:relative;z-index:1">
+                      <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:3px;max-width:52px">
+                        <sc-for list="{{ logPreviewWindows }}" as="w" hint-placeholder-count="4"><div style="width:9px;height:9px;background:{{ w.color }};border:1px solid rgba(0,0,0,.4);border-radius:1px;box-shadow:{{ w.glow }};animation:{{ w.flicker }}"></div></sc-for>
+                      </div>
+                      <div style="width:14px;height:16px;background:#5a4a38;border-radius:2px 2px 0 0;margin:8px auto 0"></div>
+                      <div style="position:absolute;right:-9px;top:50%;transform:translateY(-50%);width:6px;height:16px;background:#241c10;border:1px solid rgba(0,0,0,.6);border-radius:3px">
+                        <div style="position:absolute;left:1px;width:2px;height:2px;border-radius:50%;transition:top .3s ease-out;top:{{ billSwitchDotTop }};background:{{ billSwitchDotColor }}"></div>
+                      </div>
+                    </div>
+                  </div>
+                  <div style="position:absolute;bottom:14px;left:calc(50% + 24px);animation:fixerWalk .8s ease-out forwards">
+                    <img src="assets/char-fixer.png?v=3" style="width:32px;height:32px;image-rendering:pixelated"/>
+                  </div>
+                </sc-if>
+                <sc-if value="{{ animActorIsCharge }}" hint-placeholder-val="{{ false }}">
+                  <div style="position:absolute;font-family:'Press Start 2P';font-size:26px;color:#ffcf8e;text-shadow:0 0 12px rgba(255,207,142,.7);animation:chargeGrow 1s ease-out forwards">+{{ lastAmountFmt }}</div>
+                </sc-if>
+                <sc-if value="{{ animActorIsOther }}" hint-placeholder-val="{{ false }}">
+                  <div style="position:absolute;animation:otherStamp .8s ease-out forwards;width:34px;height:44px;background:#e8ddf0;border-radius:2px 10px 2px 2px;position:relative">
+                    <div style="position:absolute;top:11px;left:6px;width:22px;height:3px;background:#2a1c36"></div>
+                    <div style="position:absolute;top:19px;left:6px;width:22px;height:3px;background:#2a1c36"></div>
+                    <div style="position:absolute;top:27px;left:6px;width:14px;height:3px;background:#2a1c36"></div>
+                  </div>
+                  <div style="position:absolute;bottom:10px;left:calc(50% - 60px);animation:racerWalk .7s ease-out forwards">
+                    <img src="assets/char-racer.png?v=2" style="width:30px;height:30px;image-rendering:pixelated;border-radius:6px"/>
+                  </div>
+                  <div style="position:absolute;top:8px;left:calc(50% - 18px);max-width:130px;background:#1b2530;border:1px solid #2a3a4a;border-radius:8px;padding:5px 8px;font:9px system-ui;color:#cfe8f0;opacity:0;animation:signPop .5s ease-out .35s forwards">{{ otherQuip }}</div>
+                </sc-if>
+                <sc-if value="{{ logStageDone }}" hint-placeholder-val="{{ false }}">
+                  <div style="font:11px system-ui;color:#6ee0a8;position:absolute;animation:popFloat 1.1s ease-out forwards">-{{ lastAmountFmt }}</div>
+                </sc-if>
+              </div>
+            </div>
+
+            <div style="padding:12px 16px;display:flex;flex-direction:column;gap:12px">
+              <div style="display:flex;gap:8px">
+                <button onClick="{{ setCatDebt }}" style="flex:1;background:{{ catDebtBg }};color:{{ catDebtColor }};border:2px solid {{ catDebtBorder }};border-radius:9px;padding:10px 6px;font:9px system-ui;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:5px">
+                  <div style="width:18px;height:20px;position:relative"><div style="position:absolute;bottom:0;left:3px;width:12px;height:20px;background:{{ catDebtColor }};border-radius:2px 2px 0 0"></div></div>
+                  DEBT
+                </button>
+                <button onClick="{{ setCatBill }}" style="flex:1;background:{{ catBillBg }};color:{{ catBillColor }};border:2px solid {{ catBillBorder }};border-radius:9px;padding:10px 6px;font:9px system-ui;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:5px">
+                  <div style="width:20px;height:20px;position:relative">
+                    <div style="position:absolute;top:0;left:0;width:0;height:0;border-left:10px solid transparent;border-right:10px solid transparent;border-bottom:9px solid {{ catBillColor }}"></div>
+                    <div style="position:absolute;top:8px;left:2px;width:16px;height:12px;background:{{ catBillColor }};display:flex;align-items:flex-end;justify-content:center"><div style="width:4px;height:7px;background:{{ catBillBg }}"></div></div>
+                  </div>
+                  BILL
+                </button>
+                <button onClick="{{ setCatOther }}" style="flex:1;background:{{ catOtherBg }};color:{{ catOtherColor }};border:2px solid {{ catOtherBorder }};border-radius:9px;padding:10px 6px;font:9px system-ui;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:5px">
+                  <div style="width:16px;height:20px;background:{{ catOtherColor }};border-radius:1px 5px 1px 1px;position:relative"><div style="position:absolute;top:5px;left:3px;width:10px;height:2px;background:#1a1420"></div><div style="position:absolute;top:9px;left:3px;width:10px;height:2px;background:#1a1420"></div><div style="position:absolute;top:13px;left:3px;width:6px;height:2px;background:#1a1420"></div></div>
+                  OTHER
+                </button>
+              </div>
+
+              <sc-if value="{{ isDebtCategory }}" hint-placeholder-val="{{ true }}">
+                <div style="display:flex;gap:6px">
+                  <button onClick="{{ setModePayment }}" style="flex:1;background:{{ modePaymentBg }};color:{{ modePaymentColor }};border:2px solid transparent;border-radius:8px;padding:9px;font:10px system-ui;cursor:pointer">Payment (−)</button>
+                  <button onClick="{{ setModeCharge }}" style="flex:1;background:{{ modeChargeBg }};color:{{ modeChargeColor }};border:2px solid transparent;border-radius:8px;padding:9px;font:10px system-ui;cursor:pointer">New Charge (+)</button>
+                </div>
+              </sc-if>
+
+              <sc-if value="{{ showTargetSelect }}" hint-placeholder-val="{{ true }}">
+                <div style="display:flex;flex-direction:column;gap:4px">
+                  <div style="font:8px 'Press Start 2P';color:rgba(255,255,255,.4);letter-spacing:.5px">TARGET</div>
+                  <select value="{{ logTargetId }}" onChange="{{ setLogTarget }}" style="background:#160f1e;border:2px solid #3a2a54;border-radius:8px;padding:11px;color:#fff;font:12px system-ui">
+                    <sc-for list="{{ logTargetOptions }}" as="o" hint-placeholder-count="3"><option value="{{ o.id }}">{{ o.name }}</option></sc-for>
+                  </select>
+                </div>
+              </sc-if>
+
+              <div style="display:flex;gap:8px">
+                <div style="flex:1;display:flex;flex-direction:column;gap:4px">
+                  <div style="font:8px 'Press Start 2P';color:rgba(255,255,255,.4);letter-spacing:.5px">PLANNED $</div>
+                  <input value="{{ logPlanned }}" onChange="{{ setLogPlanned }}" placeholder="0" type="number" style="background:#160f1e;border:2px solid #2a1c36;border-radius:8px;padding:11px;color:#fff;font:12px system-ui"/>
+                </div>
+                <div style="flex:1;display:flex;flex-direction:column;gap:4px">
+                  <div style="font:8px 'Press Start 2P';color:rgba(255,255,255,.4);letter-spacing:.5px">ACTUAL $</div>
+                  <input value="{{ logActual }}" onChange="{{ setLogActual }}" placeholder="0" type="number" style="background:#160f1e;border:2px solid #3a2a54;border-radius:8px;padding:11px;color:#fff;font:12px system-ui"/>
+                </div>
+              </div>
+
+              <sc-if value="{{ showMinChip }}" hint-placeholder-val="{{ false }}">
+                <div style="display:flex;gap:6px;flex-wrap:wrap">
+                  <button onClick="{{ applyMinChip }}" style="background:#221530;border:1px solid #3a2a54;color:#c9b8ff;border-radius:20px;padding:5px 11px;font:9px system-ui;cursor:pointer">Min payment · {{ minPaymentChipFmt }}</button>
+                  <sc-if value="{{ showLastChip }}" hint-placeholder-val="{{ false }}"><button onClick="{{ applyLastChip }}" style="background:#221530;border:1px solid #3a2a54;color:#c9b8ff;border-radius:20px;padding:5px 11px;font:9px system-ui;cursor:pointer">Last paid · {{ lastAmountChipFmt }}</button></sc-if>
+                </div>
+              </sc-if>
+
+              <sc-if value="{{ hasVariance }}" hint-placeholder-val="{{ false }}">
+                <div style="font:10px system-ui;color:#e8b86e;background:#2a2312;border-radius:6px;padding:7px 9px">ℹ {{ varianceMsg }}</div>
+              </sc-if>
+
+              <div style="display:flex;flex-direction:column;gap:4px">
+                <div style="font:8px 'Press Start 2P';color:rgba(255,255,255,.4);letter-spacing:.5px">NOTES</div>
+                <input value="{{ logNotes }}" onChange="{{ setLogNotes }}" placeholder="Optional" style="background:#160f1e;border:2px solid #2a1c36;border-radius:8px;padding:11px;color:#fff;font:12px system-ui"/>
+              </div>
+
+              <div style="display:flex;gap:6px">
+                <button onClick="{{ setLoggedByMe }}" style="flex:1;background:{{ byMeBg }};color:#fff;border:2px solid transparent;border-radius:8px;padding:9px;font:10px system-ui;cursor:pointer">Logged by: Me</button>
+                <button onClick="{{ setLoggedBySpouse }}" style="flex:1;background:{{ bySpouseBg }};color:#fff;border:2px solid transparent;border-radius:8px;padding:9px;font:10px system-ui;cursor:pointer">Logged by: Spouse</button>
+              </div>
+
+              <button onClick="{{ submitLog }}" style="background:#c0392b;color:#fff;border:2px solid #7a2419;border-radius:9px;padding:14px;font:12px 'Press Start 2P';cursor:pointer;box-shadow:0 4px 0 #7a2419">{{ submitLabel }}</button>
+
+              <sc-if value="{{ logStageDone }}" hint-placeholder-val="{{ false }}">
+                <div style="text-align:center;font:11px system-ui;color:#8ef0c0;margin-top:4px">✓ Logged! <a href="#" onClick="{{ logAnother }}" style="color:#c9b8ff">Log another</a> · <a href="#" onClick="{{ jumpDashboard }}" style="color:#c9b8ff">Dashboard</a></div>
+              </sc-if>
+            </div>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ isTrend }}" hint-placeholder-val="{{ false }}">
+          <div style="flex:1;display:flex;flex-direction:column;background:#100a16;overflow-y:auto">
+            <div style="padding:16px 16px 8px;flex:none;display:flex;align-items:center;gap:8px">
+              <button onClick="{{ jumpDashboard }}" style="background:none;border:none;color:#c9b8ff;font-size:14px;cursor:pointer">←</button>
+              <div style="font-family:'Press Start 2P';font-size:12px;color:#ffd36e">TREND REPORT</div>
+            </div>
+            <div style="padding:12px 16px 16px;display:flex;flex-direction:column;gap:14px">
+              <div style="display:flex;gap:8px;align-items:flex-start;background:#150c1c;border:2px solid #2a1c36;border-radius:9px;padding:9px">
+                <img src="assets/char-racer.png?v=2" style="width:28px;height:28px;flex:none;border-radius:7px;image-rendering:pixelated"/>
+                <div style="background:#1b2530;border-radius:8px;padding:7px 9px;font:10.5px system-ui;color:#cfe8f0;line-height:1.4">{{ racerTrendMessage }}</div>
+              </div>
+
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+                <div style="background:#150c1c;border:2px solid #2a1c36;border-radius:9px;padding:9px 10px;text-align:center">
+                  <div style="font:8px 'Press Start 2P';color:rgba(255,255,255,.45);letter-spacing:.5px">DEBT-FREE BY</div>
+                  <div style="font:13px system-ui;font-weight:700;color:#fff;margin-top:4px">{{ debtFreeDate }}</div>
+                </div>
+                <div style="background:#150c1c;border:2px solid #2a1c36;border-radius:9px;padding:9px 10px;text-align:center">
+                  <div style="font:8px 'Press Start 2P';color:rgba(255,255,255,.45);letter-spacing:.5px">ON-TIME BILLS</div>
+                  <div style="font:13px system-ui;font-weight:700;color:#fff;margin-top:4px">{{ onTimeBillsLabel }}</div>
+                </div>
+              </div>
+
+              <div style="background:linear-gradient(180deg,#241318,#150c1c);border:2px solid #6a3226;border-radius:10px;padding:12px">
+                <div style="display:flex;justify-content:space-between;align-items:baseline">
+                  <div style="font:9px 'Press Start 2P';color:#ff9a7a;letter-spacing:1px">🏦 DEBT BALANCE</div>
+                  <div style="font-family:'Press Start 2P';font-size:18px;color:#ff9a7a;text-shadow:0 0 10px rgba(255,90,77,.5)">{{ trendDebtDigit }}</div>
+                </div>
+                <div style="background:#100a16;border-radius:8px;padding:10px;margin-top:8px" data-om-raster="true">
+                  <svg viewBox="0 0 320 128" width="100%" height="128">
+                    <sc-for list="{{ skylineBg }}" as="s" hint-placeholder-count="6"><rect x="{{ s.x }}" y="{{ s.y }}" width="{{ s.w }}" height="{{ s.h }}" fill="{{ s.color }}" opacity=".22"></rect></sc-for>
+                    <polyline points="{{ debtChartPoints }}" fill="none" stroke="#e2543a" stroke-width="3"></polyline>
+                    <sc-for list="{{ debtChartDots }}" as="p" hint-placeholder-count="6"><rect x="{{ p.x }}" y="{{ p.y }}" width="7" height="7" fill="#ff9a7a" stroke="#100a16" stroke-width="1" transform="{{ p.rot }}"></rect></sc-for>
+                    <sc-for list="{{ trendMonths }}" as="m" hint-placeholder-count="6"><text x="{{ m.x }}" y="123" font-size="8" font-family="system-ui" fill="rgba(255,255,255,.4)" text-anchor="middle">{{ m.label }}</text></sc-for>
+                  </svg>
+                </div>
+                <div style="font:9.5px system-ui;color:rgba(255,255,255,.6);margin-top:8px">{{ debtTrendSummary }}</div>
+              </div>
+
+              <div style="background:linear-gradient(180deg,#15281f,#150c1c);border:2px solid #2e6a4a;border-radius:10px;padding:12px">
+                <div style="display:flex;justify-content:space-between;align-items:baseline">
+                  <div style="font:9px 'Press Start 2P';color:#6ee0a8;letter-spacing:1px">🏆 FAMILY SCORE</div>
+                  <div style="font-family:'Press Start 2P';font-size:18px;color:{{ trendScoreColor }};text-shadow:0 0 10px {{ trendScoreColor }}">{{ trendScoreDigit }}</div>
+                </div>
+                <div style="font:8.5px system-ui;color:rgba(255,255,255,.4);margin-top:2px">Income − Bills − Min. Debt Payments</div>
+                <div style="background:#100a16;border-radius:8px;padding:10px;margin-top:8px" data-om-raster="true">
+                  <svg viewBox="0 0 320 128" width="100%" height="128">
+                    <sc-for list="{{ skylineBg }}" as="s" hint-placeholder-count="6"><rect x="{{ s.x }}" y="{{ s.y }}" width="{{ s.w }}" height="{{ s.h }}" fill="{{ s.color }}" opacity=".22"></rect></sc-for>
+                    <line x1="0" y1="60" x2="320" y2="60" stroke="rgba(255,255,255,.15)" stroke-dasharray="3,3"></line>
+                    <polyline points="{{ scoreChartPoints }}" fill="none" stroke="#6ee0a8" stroke-width="3"></polyline>
+                    <sc-for list="{{ scoreChartDots }}" as="p" hint-placeholder-count="6">
+                      <circle cx="{{ p.cx }}" cy="{{ p.cy }}" r="5" fill="{{ p.color }}" stroke="#100a16" stroke-width="1"></circle>
+                    </sc-for>
+                    <sc-for list="{{ trendMonths }}" as="m" hint-placeholder-count="6"><text x="{{ m.x }}" y="123" font-size="8" font-family="system-ui" fill="rgba(255,255,255,.4)" text-anchor="middle">{{ m.label }}</text></sc-for>
+                  </svg>
+                </div>
+                <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:8px">
+                  <sc-for list="{{ streakBadgeMonths }}" as="m" hint-placeholder-count="0"><div style="font:8px system-ui;background:#2a2312;color:#ffd36e;border:1px solid #4a3a1c;border-radius:4px;padding:2px 6px">{{ m.icon }} {{ m.month }}</div></sc-for>
+                </div>
+                <div style="font:9.5px system-ui;color:rgba(255,255,255,.6);margin-top:8px">{{ scoreTrendSummary }}</div>
+              </div>
+
+              <div style="background:#150c1c;border:2px solid #2a1c36;border-radius:9px;padding:10px">
+                <div style="font:8px 'Press Start 2P';color:rgba(255,255,255,.45);letter-spacing:.5px;margin-bottom:8px">BILL PAYMENT STREAKS</div>
+                <div style="display:flex;flex-direction:column;gap:6px">
+                  <sc-for list="{{ billsView }}" as="b" hint-placeholder-count="3">
+                    <div style="display:flex;align-items:center;gap:8px">
+                      <div style="width:8px;height:8px;border-radius:2px;background:{{ b.dotColor }};flex:none"></div>
+                      <div style="flex:1;font:10.5px system-ui;color:#e8ddf0">{{ b.name }}</div>
+                      <sc-if value="{{ b.hasStreak }}" hint-placeholder-val="{{ false }}"><div style="font:9px system-ui;color:#ffd36e">{{ b.streakIcon }} {{ b.streak }}mo</div></sc-if>
+                    </div>
+                  </sc-for>
+                </div>
+              </div>
+
+              <button onClick="{{ toggleEmptyPreview }}" style="background:#150c1c;border:2px solid #2a1c36;color:rgba(255,255,255,.5);border-radius:7px;padding:9px;font:9px system-ui;cursor:pointer">{{ emptyPreviewLabel }}</button>
+              <sc-if value="{{ trendEmptyPreview }}" hint-placeholder-val="{{ false }}">
+                <div style="background:#150c1c;border:1px solid #2a1c36;border-radius:9px;padding:9px;font:10.5px system-ui;color:#cfe8f0">🧭 "First month logged — check back after a few cycles to see your trend take shape."</div>
+              </sc-if>
+            </div>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ isAddScreen }}" hint-placeholder-val="{{ false }}">
+          <div style="flex:1;display:flex;flex-direction:column;background:#100a16;overflow-y:auto">
+            <div style="padding:16px 16px 8px;flex:none;display:flex;align-items:center;gap:8px">
+              <button onClick="{{ jumpDashboard }}" style="background:none;border:none;color:#c9b8ff;font-size:14px;cursor:pointer">←</button>
+              <div style="font-family:'Press Start 2P';font-size:12px;color:#ffd36e">{{ addScreenTitle }}</div>
+            </div>
+            <div style="display:flex;gap:6px;padding:0 16px 8px;flex:none">
+              <button onClick="{{ setAddDebtMode }}" style="flex:1;background:{{ addDebtTabBg }};color:#fff;border:none;border-radius:7px;padding:9px;font:10px system-ui;cursor:pointer">Add Debt</button>
+              <button onClick="{{ setAddBillMode }}" style="flex:1;background:{{ addBillTabBg }};color:#fff;border:none;border-radius:7px;padding:9px;font:10px system-ui;cursor:pointer">Add Bill</button>
+            </div>
+
+            <div style="margin:0 16px;background:linear-gradient(180deg,#181022,#221530);border-radius:10px;padding:12px 10px 0;min-height:110px;display:flex;gap:8px;align-items:flex-end;position:relative;overflow-x:auto;flex:none">
+              <sc-for list="{{ liveSkylineView }}" as="s" hint-placeholder-count="3">
+                <div style="width:44px;flex:none;display:flex;flex-direction:column;align-items:center">
+                  <div style="width:38px;height:{{ s.heightPx }}px;background:{{ s.color }};border:2px solid rgba(0,0,0,.5);border-radius:3px 3px 0 0"></div>
+                </div>
+              </sc-for>
+              <div style="position:absolute;left:0;bottom:0;height:10px;width:100%;background:#0e0812;border-top:2px solid #2a1c36"></div>
+            </div>
+
+            <div style="padding:16px;display:flex;flex-direction:column;gap:10px">
+              <sc-if value="{{ isAddDebtMode }}" hint-placeholder-val="{{ true }}">
+                <input value="{{ newDebt.name }}" onChange="{{ setNewDebtName }}" placeholder="Debt name" style="background:#160f1e;border:1px solid #2a1c36;border-radius:7px;padding:10px;color:#fff;font:12px system-ui"/>
+                <div style="display:flex;gap:8px">
+                  <input value="{{ newDebt.balance }}" onChange="{{ setNewDebtBalance }}" placeholder="Balance" type="number" style="flex:1;background:#160f1e;border:1px solid #2a1c36;border-radius:7px;padding:10px;color:#fff;font:12px system-ui"/>
+                  <input value="{{ newDebt.minPayment }}" onChange="{{ setNewDebtMin }}" placeholder="Min. payment" type="number" style="flex:1;background:#160f1e;border:1px solid #2a1c36;border-radius:7px;padding:10px;color:#fff;font:12px system-ui"/>
+                </div>
+                <button onClick="{{ addDebtPostSetup }}" style="background:#4a2a2a;color:#f0a08e;border:1px solid #6a3a3a;border-radius:7px;padding:11px;font:11px system-ui;cursor:pointer">+ Add Debt Tower</button>
+              </sc-if>
+              <sc-if value="{{ isAddBillMode }}" hint-placeholder-val="{{ false }}">
+                <input value="{{ newBill.name }}" onChange="{{ setNewBillName }}" placeholder="Bill name" style="background:#160f1e;border:1px solid #2a1c36;border-radius:7px;padding:10px;color:#fff;font:12px system-ui"/>
+                <div style="display:flex;gap:8px">
+                  <input value="{{ newBill.amount }}" onChange="{{ setNewBillAmount }}" placeholder="Amount due" type="number" style="flex:1;background:#160f1e;border:1px solid #2a1c36;border-radius:7px;padding:10px;color:#fff;font:12px system-ui"/>
+                  <input value="{{ newBill.dueDay }}" onChange="{{ setNewBillDueDay }}" placeholder="Due day" type="number" style="flex:1;background:#160f1e;border:1px solid #2a1c36;border-radius:7px;padding:10px;color:#fff;font:12px system-ui"/>
+                </div>
+                <button onClick="{{ addBillPostSetup }}" style="background:#2a3a4a;color:#8ec0f0;border:1px solid #3a5a72;border-radius:7px;padding:11px;font:11px system-ui;cursor:pointer">+ Add Bill Building</button>
+              </sc-if>
+            </div>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ showTabs }}" hint-placeholder-val="{{ true }}">
+          <div style="flex:none;display:flex;border-top:2px solid #2a1c36;background:#140c1a">
+            <button onClick="{{ jumpDashboard }}" style="flex:1;background:none;border:none;color:{{ tabDashColor }};padding:11px 0;font:8px system-ui;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:3px"><div style="width:12px;height:10px;background:currentColor;clip-path:polygon(0 100%,0 40%,50% 0,100% 40%,100% 100%)"></div>Dashboard</button>
+            <button onClick="{{ jumpLog }}" style="flex:1;background:none;border:none;color:{{ tabLogColor }};padding:11px 0;font:8px system-ui;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:3px"><div style="width:10px;height:12px;background:currentColor;clip-path:polygon(60% 0,20% 55%,45% 55%,30% 100%,80% 45%,55% 45%)"></div>Log</button>
+            <button onClick="{{ jumpTrend }}" style="flex:1;background:none;border:none;color:{{ tabTrendColor }};padding:11px 0;font:8px system-ui;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:3px"><div style="display:flex;gap:1px;align-items:flex-end;height:12px"><div style="width:3px;height:50%;background:currentColor"></div><div style="width:3px;height:100%;background:currentColor"></div><div style="width:3px;height:75%;background:currentColor"></div></div>Trend</button>
+            <button onClick="{{ jumpAddDebt }}" style="flex:1;background:none;border:none;color:{{ tabAddColor }};padding:11px 0;font:8px system-ui;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:3px"><div style="width:14px;height:14px;position:relative"><div style="position:absolute;top:6px;left:0;width:14px;height:2px;background:currentColor"></div><div style="position:absolute;left:6px;top:0;width:2px;height:14px;background:currentColor"></div></div>Add</button>
+          </div>
+        </sc-if>
+
+      </div>
+
+      <sc-if value="{{ towerDownActive }}" hint-placeholder-val="{{ false }}">
+        <div ref="{{ tdOverlayRef }}" style="position:absolute;inset:0;background:#0a0710;z-index:80;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;padding-top:60px;gap:22px;overflow:hidden">
+          <sc-if value="{{ tdSignVisible }}" hint-placeholder-val="{{ false }}">
+            <div style="position:absolute;top:22%;left:50%;transform:translate(-50%,-50%);animation:centerFadeIn 2.2s ease-out forwards;font-family:'Press Start 2P';font-size:22px;color:#ff5a4d;text-shadow:0 0 16px rgba(255,90,77,.7);white-space:nowrap;z-index:5">DEBT DEFEATED</div>
+          </sc-if>
+          <div style="position:relative;width:180px;height:280px;display:flex;align-items:flex-end;justify-content:center">
+            <sc-if value="{{ tdShowTower }}" hint-placeholder-val="{{ true }}">
+              <div style="width:96px;height:{{ tdTowerHeight }}px;position:relative;transform-origin:bottom;animation:{{ tdTowerAnim }};background:{{ tdTowerColor }};border:2px solid rgba(0,0,0,.55);border-radius:5px 5px 0 0;box-shadow:inset 0 0 0 2px rgba(255,255,255,.1);overflow:hidden">
+                <div style="position:absolute;top:0;left:0;right:0;height:8px;background:rgba(0,0,0,.28)"></div>
+                <div style="position:absolute;inset:12px 10px 6px;display:grid;grid-template-columns:repeat(2,1fr);grid-template-rows:repeat(5,1fr);gap:6px 8px">
+                  <sc-for list="{{ tdWindows }}" as="w" hint-placeholder-count="10">
+                    <div style="background:{{ w.color }};border-radius:1px"></div>
+                  </sc-for>
+                </div>
+              </div>
+            </sc-if>
+            <sc-if value="{{ tdShowRubble }}" hint-placeholder-val="{{ false }}">
+              <div style="position:relative;width:130px;height:34px">
+                <div style="position:absolute;top:-40px;left:-10px;width:140px;height:140px;border-radius:50%;background:radial-gradient(circle,rgba(180,160,140,.5),transparent 70%);animation:dustExpand .7s ease-out"></div>
+                <sc-if value="{{ tdSignVisible }}" hint-placeholder-val="{{ false }}">
+                  <div style="position:absolute;bottom:6px;left:56px;transform:translate(-50%,20px);animation:riseFromRubble 2s ease-out forwards;width:36px;height:64px;overflow:hidden;z-index:0">
+                    <div style="display:flex;flex-direction:column;align-items:center">
+                      <img src="assets/tile_0042.png" style="width:36px;height:auto;image-rendering:pixelated;display:block"/>
+                      <img src="assets/tile_0058.png" style="width:36px;height:auto;image-rendering:pixelated;display:block"/>
+                    </div>
+                  </div>
+                </sc-if>
+                <div style="position:absolute;bottom:0;left:2px;width:22px;height:16px;background:#8a8a92;border:2px solid #35343c;border-radius:2px;transform:rotate(-8deg);z-index:1"></div>
+                <div style="position:absolute;bottom:2px;left:24px;width:18px;height:20px;background:#b0453a;border:2px solid #4a1a14;border-radius:2px;transform:rotate(6deg);z-index:1"></div>
+                <div style="position:absolute;bottom:0;left:44px;width:26px;height:14px;background:#6f6e76;border:2px solid #2a292f;border-radius:2px;transform:rotate(-3deg);z-index:1"></div>
+                <div style="position:absolute;bottom:3px;left:70px;width:18px;height:18px;background:#b0453a;border:2px solid #4a1a14;border-radius:2px;transform:rotate(-14deg);z-index:1"></div>
+                <div style="position:absolute;bottom:0;left:92px;width:22px;height:15px;background:#8a8a92;border:2px solid #35343c;border-radius:2px;transform:rotate(10deg);z-index:1"></div>
+                <div style="position:absolute;bottom:5px;left:56px;width:16px;height:14px;background:#6f6e76;border:2px solid #2a292f;border-radius:2px;transform:rotate(20deg);z-index:1"></div>
+                <div style="position:absolute;bottom:1px;left:12px;width:16px;height:12px;background:#b0453a;border:2px solid #4a1a14;border-radius:2px;transform:rotate(14deg);z-index:1"></div>
+                <div style="position:absolute;bottom:0;left:36px;width:14px;height:16px;background:#6f6e76;border:2px solid #2a292f;border-radius:2px;transform:rotate(-18deg);z-index:1"></div>
+                <div style="position:absolute;bottom:2px;left:60px;width:20px;height:14px;background:#8a8a92;border:2px solid #35343c;border-radius:2px;transform:rotate(4deg);z-index:1"></div>
+                <div style="position:absolute;bottom:0;left:82px;width:16px;height:18px;background:#b0453a;border:2px solid #4a1a14;border-radius:2px;transform:rotate(-9deg);z-index:1"></div>
+                <div style="position:absolute;bottom:3px;left:106px;width:18px;height:14px;background:#6f6e76;border:2px solid #2a292f;border-radius:2px;transform:rotate(16deg);z-index:1"></div>
+                <div style="position:absolute;bottom:1px;left:44px;width:18px;height:16px;background:#b0453a;border:2px solid #4a1a14;border-radius:2px;transform:rotate(8deg);z-index:1"></div>
+                <div style="position:absolute;bottom:0;left:68px;width:14px;height:20px;background:#8a8a92;border:2px solid #35343c;border-radius:2px;transform:rotate(-6deg);z-index:1"></div>
+                <div style="position:absolute;bottom:4px;left:-4px;width:16px;height:12px;background:#6f6e76;border:2px solid #2a292f;border-radius:2px;transform:rotate(-20deg);z-index:1"></div>
+                <div style="position:absolute;bottom:2px;left:116px;width:16px;height:16px;background:#8a8a92;border:2px solid #35343c;border-radius:2px;transform:rotate(22deg);z-index:1"></div>
+                <div style="position:absolute;bottom:-6px;left:38px;width:20px;height:16px;background:#6f6e76;border:2px solid #2a292f;border-radius:2px;transform:rotate(-10deg);z-index:2"></div>
+                <div style="position:absolute;bottom:-8px;left:56px;width:22px;height:18px;background:#b0453a;border:2px solid #4a1a14;border-radius:2px;transform:rotate(5deg);z-index:2"></div>
+                <div style="position:absolute;bottom:-5px;left:76px;width:18px;height:15px;background:#8a8a92;border:2px solid #35343c;border-radius:2px;transform:rotate(15deg);z-index:2"></div>
+              </div>
+            </sc-if>
+            <sc-if value="{{ tdShowWrecker }}" hint-placeholder-val="{{ false }}">
+              <div style="position:absolute;left:50%;bottom:{{ tdWreckerRestBottom }}px;transform:translateX(-50%);z-index:3">
+                <div style="animation:{{ tdWreckerAnim }}">
+                  <img src="assets/char-wrecker.png?v=3" style="width:64px;height:64px;image-rendering:pixelated"/>
+                </div>
+              </div>
+            </sc-if>
+          </div>
+          <div style="font:9px system-ui;color:rgba(255,255,255,.4)">{{ tdDebtName }} — paid in full</div>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ toast }}" hint-placeholder-val="{{ false }}">
+        <div style="position:absolute;bottom:70px;left:16px;right:16px;background:#1c1428;border:1px solid #3a2a54;border-radius:8px;padding:9px 12px;font:10.5px system-ui;color:#e8ddf0;z-index:90;box-shadow:0 6px 16px rgba(0,0,0,.4)">{{ toastText }}</div>
+      </sc-if>
+
+    </div>
+  </div>
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+
+const PALETTE=['#e2543a','#3a8fe2','#e2b23a','#8f5ae2','#3ae2b2','#e23a8f'];
+const BILL_PALETTE=['#ffd36e','#8fe2c7','#e28f8f','#8fb2e2','#c9a8f0'];
+const OTHER_QUIPS=['"Logged it. Every bit counts."','"Noted — stay on track."','"Got it, receipt filed."','"Tracked. Nice and tidy."'];
+const fmt=n=>'$'+Math.round(n).toLocaleString();
+
+class Component extends DCLogic {
+  state={
+    screen:'dashboard', orientation:'portrait',
+    scoreDisplay:0,
+    income:[
+      {id:'i1',name:'Salary',owner:'me',payType:'twice_monthly',amountPerCheck:1850},
+      {id:'i2',name:'Freelance',owner:'spouse',payType:'weekly',amountPerCheck:340},
+    ],
+    bills:[
+      {id:'b1',name:'Electric',amount:140,dueDay:5,cycle:'monthly',paidThisMonth:false,streak:5},
+      {id:'b2',name:'Internet',amount:70,dueDay:12,cycle:'monthly',paidThisMonth:true,streak:11},
+      {id:'b3',name:'Car Insurance',amount:110,dueDay:20,cycle:'monthly',paidThisMonth:false,streak:2},
+    ],
+    lastResetMonth:new Date().getMonth(),
+    fixerAnim:null, justLitBillId:null,
+    debts:[
+      {id:'d1',name:'Credit Card',balance:420,originalBalance:900,minPayment:75,rate:22,color:PALETTE[0],priority:1,cleared:false},
+      {id:'d2',name:'Car Loan',balance:8200,originalBalance:9500,minPayment:310,rate:7,color:PALETTE[1],priority:2,cleared:false},
+      {id:'d3',name:'Student Loan',balance:15600,originalBalance:16200,minPayment:180,rate:5,color:PALETTE[2],priority:3,cleared:false},
+    ],
+    activity:[
+      {id:'a1',icon:'🛒',label:'Groceries',who:'Me',time:'2d ago',amount:86},
+      {id:'a2',icon:'🔧',label:'Paid Internet',who:'Spouse',time:'4d ago',amount:70},
+      {id:'a3',icon:'🔨',label:'Hit Credit Card',who:'Me',time:'6d ago',amount:150},
+    ],
+    trend:[
+      {month:'Mar',debt:31000,score:1200},{month:'Apr',debt:29200,score:-300},{month:'May',debt:27800,score:1800},
+      {month:'Jun',debt:26100,score:2600},{month:'Jul',debt:25000,score:3400},{month:'Aug',debt:24220,score:4285},
+    ],
+    debtStreak:3,
+    loggedBy:'me',
+    logCategory:'debt', logMode:'payment', logTargetId:'d1', logPlanned:'', logActual:'', logNotes:'', lastAmounts:{},
+    logStage:'idle', animActor:null, animPhase:'',
+    towerDown:null,
+    dragId:null,
+    newIncome:{name:'',owner:'me',payType:'twice_monthly',amount:''},
+    newBill:{name:'',amount:'',dueDay:'',cycle:'monthly'},
+    newDebt:{name:'',balance:'',rate:'',minPayment:''},
+    setupSkyline:[],
+    addMode:'debt',
+    trendEmptyPreview:false,
+    toast:null,
+    shaking:false,
+  };
+
+  componentDidMount(){
+    this._tick=setInterval(()=>{
+      const target=this.familyScore();
+      this.setState(s=>{
+        const diff=target-s.scoreDisplay;
+        if(Math.abs(diff)<1) return diff===0?null:{scoreDisplay:target};
+        return {scoreDisplay:s.scoreDisplay+diff*0.18};
+      });
+    },40);
+  }
+  componentWillUnmount(){ clearInterval(this._tick); clearTimeout(this._seqTimeout); clearTimeout(this._toastTimeout); clearTimeout(this._demoTimeout); clearTimeout(this._shakeTimeout); clearTimeout(this._seqTimeout2b); }
+
+  monthlyIncome(){ return this.state.income.reduce((sum,i)=>{ const per=i.payType==='twice_monthly'?2:4.33; return sum+i.amountPerCheck*per; },0); }
+  monthlyBills(){ return this.state.bills.reduce((s,b)=>s+b.amount,0); }
+  monthlyMin(){ return this.state.debts.filter(d=>!d.cleared).reduce((s,d)=>s+d.minPayment,0); }
+  totalDebt(){ return this.state.debts.filter(d=>!d.cleared).reduce((s,d)=>s+d.balance,0); }
+  familyScore(){ return this.monthlyIncome()-this.monthlyBills()-this.monthlyMin(); }
+  extraCash(){ return this.familyScore(); }
+
+  showToast(text){ clearTimeout(this._toastTimeout); this.setState({toast:text}); this._toastTimeout=setTimeout(()=>this.setState({toast:null}),3000); }
+
+  jumpDashboard=()=>this.setState({screen:'dashboard'});
+  jumpWizard=()=>this.setState({screen:'wizard'});
+  jumpLog=()=>this.setState({screen:'log',logStage:'idle'});
+  jumpTrend=()=>this.setState({screen:'trend'});
+  jumpAddDebt=()=>this.setState({screen:'add',addMode:'debt'});
+  toggleOrientation=()=>this.setState(s=>({orientation:s.orientation==='portrait'?'landscape':'portrait'}));
+
+  jumpTowerDownDemo=()=>{
+    clearTimeout(this._seqTimeout); clearTimeout(this._demoTimeout);
+    this.setState(s=>{
+      const debts=s.debts.map(d=>d.id==='d1'?{...d,balance:420,originalBalance:900,cleared:false,damage:3}:d);
+      return {screen:'dashboard',debts,towerDown:null,shaking:false};
+    });
+    this._demoTimeout=setTimeout(()=>this.startTowerDown('d1'),350);
+  };
+
+  finishSetup=()=>this.setState({screen:'dashboard'});
+  removeIncome=id=>this.setState(s=>({income:s.income.filter(i=>i.id!==id)}));
+  removeBill=id=>this.setState(s=>({bills:s.bills.filter(b=>b.id!==id)}));
+  removeDebt=id=>this.setState(s=>({debts:s.debts.filter(d=>d.id!==id)}));
+
+  setNewIncomeName=e=>this.setState(s=>({newIncome:{...s.newIncome,name:e.target.value}}));
+  setNewIncomeOwner=e=>this.setState(s=>({newIncome:{...s.newIncome,owner:e.target.value}}));
+  setNewIncomePayType=e=>this.setState(s=>({newIncome:{...s.newIncome,payType:e.target.value}}));
+  setNewIncomeAmount=e=>this.setState(s=>({newIncome:{...s.newIncome,amount:e.target.value}}));
+  addIncome=()=>{
+    const {newIncome}=this.state; if(!newIncome.name||!newIncome.amount) return;
+    this.setState(s=>({income:[...s.income,{id:'i'+Date.now(),name:newIncome.name,owner:newIncome.owner,payType:newIncome.payType,amountPerCheck:parseFloat(newIncome.amount)}],newIncome:{name:'',owner:'me',payType:'twice_monthly',amount:''}}));
+  };
+
+  setNewBillName=e=>this.setState(s=>({newBill:{...s.newBill,name:e.target.value}}));
+  setNewBillAmount=e=>this.setState(s=>({newBill:{...s.newBill,amount:e.target.value}}));
+  setNewBillDueDay=e=>this.setState(s=>({newBill:{...s.newBill,dueDay:e.target.value}}));
+  setNewBillCycle=e=>this.setState(s=>({newBill:{...s.newBill,cycle:e.target.value}}));
+  addBill=()=>{
+    const {newBill}=this.state; if(!newBill.name||!newBill.amount) return;
+    const bill={id:'b'+Date.now(),name:newBill.name,amount:parseFloat(newBill.amount),dueDay:parseInt(newBill.dueDay)||1,cycle:newBill.cycle,totalWindows:4,litWindows:0,streak:0};
+    this.setState(s=>({bills:[...s.bills,bill],setupSkyline:[...s.setupSkyline,{id:bill.id,name:bill.name,heightPx:44,color:'#4a3d24'}],newBill:{name:'',amount:'',dueDay:'',cycle:'monthly'}}));
+  };
+  addBillPostSetup=()=>{
+    const {newBill}=this.state; if(!newBill.name||!newBill.amount) return;
+    const bill={id:'b'+Date.now(),name:newBill.name,amount:parseFloat(newBill.amount),dueDay:parseInt(newBill.dueDay)||1,cycle:newBill.cycle,totalWindows:4,litWindows:0,streak:0};
+    this.setState(s=>({bills:[...s.bills,bill],newBill:{name:'',amount:'',dueDay:'',cycle:'monthly'}}));
+    this.showToast('🧭 "New building on the skyline."');
+  };
+
+  setNewDebtName=e=>this.setState(s=>({newDebt:{...s.newDebt,name:e.target.value}}));
+  setNewDebtBalance=e=>this.setState(s=>({newDebt:{...s.newDebt,balance:e.target.value}}));
+  setNewDebtRate=e=>this.setState(s=>({newDebt:{...s.newDebt,rate:e.target.value}}));
+  setNewDebtMin=e=>this.setState(s=>({newDebt:{...s.newDebt,minPayment:e.target.value}}));
+  addDebt=()=>{
+    const {newDebt}=this.state; if(!newDebt.name||!newDebt.balance) return;
+    const bal=parseFloat(newDebt.balance);
+    const debt={id:'d'+Date.now(),name:newDebt.name,balance:bal,originalBalance:bal,minPayment:parseFloat(newDebt.minPayment)||0,rate:parseFloat(newDebt.rate)||0,color:PALETTE[this.state.debts.length%PALETTE.length],priority:this.state.debts.length+1,cleared:false};
+    this.setState(s=>({debts:[...s.debts,debt],setupSkyline:[...s.setupSkyline,{id:debt.id,name:debt.name,heightPx:34+Math.log10(bal+1)*30,color:debt.color}],newDebt:{name:'',balance:'',rate:'',minPayment:''}}));
+  };
+  addDebtPostSetup=()=>{
+    const {newDebt}=this.state; if(!newDebt.name||!newDebt.balance) return;
+    const bal=parseFloat(newDebt.balance);
+    const debt={id:'d'+Date.now(),name:newDebt.name,balance:bal,originalBalance:bal,minPayment:parseFloat(newDebt.minPayment)||0,rate:0,color:PALETTE[this.state.debts.length%PALETTE.length],priority:this.state.debts.length+1,cleared:false};
+    this.setState(s=>({debts:[...s.debts,debt],newDebt:{name:'',balance:'',rate:'',minPayment:''}}));
+    this.showToast('🧭 "New tower on the skyline."');
+  };
+  setAddDebtMode=()=>this.setState({addMode:'debt'});
+  setAddBillMode=()=>this.setState({addMode:'bill'});
+
+  swapPriority=(idA,idB)=>this.setState(s=>{
+    const debts=s.debts.map(d=>({...d}));
+    const a=debts.find(d=>d.id===idA), b=debts.find(d=>d.id===idB);
+    if(!a||!b) return null;
+    const pa=a.priority; a.priority=b.priority; b.priority=pa;
+    return {debts};
+  });
+  moveDebtUp=id=>{
+    const debts=this.state.debts.filter(d=>!d.cleared).sort((a,b)=>a.priority-b.priority);
+    const i=debts.findIndex(d=>d.id===id); if(i<=0) return;
+    this.swapPriority(id,debts[i-1].id);
+  };
+  moveDebtDown=id=>{
+    const debts=this.state.debts.filter(d=>!d.cleared).sort((a,b)=>a.priority-b.priority);
+    const i=debts.findIndex(d=>d.id===id); if(i<0||i>=debts.length-1) return;
+    this.swapPriority(id,debts[i+1].id);
+  };
+  onRowDragStart=(id)=>()=>this.setState({dragId:id});
+  onRowDrop=(id)=>e=>{ e.preventDefault(); const {dragId}=this.state; if(dragId&&dragId!==id) this.swapPriority(dragId,id); this.setState({dragId:null}); };
+  preventDefaultFn=e=>e.preventDefault();
+
+  clearLogAnim=()=>{
+    clearTimeout(this._seqTimeout); clearTimeout(this._seqTimeout2); clearTimeout(this._seqTimeout2b); clearTimeout(this._shakeTimeout);
+    this.setState({animActor:null,animPhase:'',fixerAnim:null,justLitBillId:null,shaking:false,logStage:'idle'});
+  };
+  setCatDebt=()=>{ this.clearLogAnim(); this.setState(s=>({logCategory:'debt',logTargetId:s.debts.find(d=>!d.cleared)?.id||''})); };
+  setCatBill=()=>{ this.clearLogAnim(); this.setState({logCategory:'bill',logTargetId:this.state.bills[0]?.id||''}); };
+  setCatOther=()=>{ this.clearLogAnim(); this.setState({logCategory:'other',logTargetId:''}); };
+  setLogTarget=e=>{ this.clearLogAnim(); this.setState({logTargetId:e.target.value}); };
+  applyQuickAmount=(val)=>this.setState({logActual:String(val)});
+  setModePayment=()=>this.setState({logMode:'payment'});
+  setModeCharge=()=>this.setState({logMode:'charge'});
+  setLogPlanned=e=>this.setState({logPlanned:e.target.value});
+  setLogActual=e=>this.setState({logActual:e.target.value});
+  setLogNotes=e=>this.setState({logNotes:e.target.value});
+  setLoggedByMe=()=>this.setState({loggedBy:'me'});
+  setLoggedBySpouse=()=>this.setState({loggedBy:'spouse'});
+  logAnother=e=>{ e&&e.preventDefault(); this.setState({logStage:'idle',logPlanned:'',logActual:'',logNotes:''}); };
+
+  captureSnapshot=()=>{
+    this.setState(s=>{
+      const totalDebt=this.totalDebt(), score=this.familyScore();
+      const month=new Date().toLocaleString('en-US',{month:'short'});
+      let trend=[...s.trend]; const last=trend[trend.length-1];
+      const entry={month,debt:Math.round(totalDebt),score:Math.round(score)};
+      if(last&&last.month===month) trend[trend.length-1]=entry; else { trend.push(entry); if(trend.length>8) trend.shift(); }
+      return {trend};
+    });
+    this.showToast('📸 Month captured.');
+  };
+
+  tdRef=React.createRef();
+  componentDidUpdate(prevProps,prevState){
+    if(prevState && !prevState.towerDown && this.state.towerDown && this.tdRef.current){
+      const rect=this.tdRef.current.getBoundingClientRect();
+      const targetY=window.scrollY+rect.top+rect.height/2-window.innerHeight/2;
+      window.scrollTo({top:Math.max(0,targetY),behavior:'smooth'});
+    }
+  }
+  startTowerDown=(debtId)=>{ clearTimeout(this._seqTimeout); this.setState({towerDown:{debtId,stage:0}}); this.advanceTowerDown(debtId,0); };
+  advanceTowerDown=(debtId,stage)=>{
+    const cur=this.state.towerDown;
+    if(!cur||cur.debtId!==debtId) return;
+    const durations=[550,500,700,650,2600];
+    if(stage===1) this.setState({shaking:true});
+    if(stage===2) this.setState({shaking:false});
+    this.setState({towerDown:{debtId,stage}});
+    if(stage<4){
+      this._seqTimeout=setTimeout(()=>this.advanceTowerDown(debtId,stage+1),durations[stage]);
+    } else {
+      this._seqTimeout=setTimeout(()=>{
+        const c2=this.state.towerDown;
+        if(!c2||c2.debtId!==debtId) return;
+        this.setState(s=>({
+          debts:s.debts.map(d=>d.id===debtId?{...d,balance:0,cleared:true}:d),
+          towerDown:null, shaking:false,
+        }));
+      },durations[4]);
+    }
+  };
+
+  submitLog=()=>{
+    const s=this.state;
+    const planned=parseFloat(s.logPlanned)||0, actual=parseFloat(s.logActual)||0;
+    const amount=actual||planned; if(amount<=0) return;
+    const who=s.loggedBy==='me'?'Me':'Spouse';
+    if(s.logCategory==='debt'){
+      const debt=s.debts.find(d=>d.id===s.logTargetId); if(!debt) return;
+      if(s.logMode==='charge'){
+        this.setState({activity:[{id:'a'+Date.now(),icon:'💳',label:'New charge on '+debt.name,who,time:'now',amount},...s.activity].slice(0,8),logStage:'idle',animActor:'charge'});
+        this._seqTimeout=setTimeout(()=>{
+          this.setState(s2=>({debts:s2.debts.map(d=>d.id===debt.id?{...d,balance:d.balance+amount,originalBalance:(d.originalBalance||d.balance)+amount,cleared:false}:d),logStage:'done',animActor:null}));
+          this.captureSnapshot();
+        },1000);
+        return;
+      }
+      const payoff=amount>=debt.balance;
+      const extraPayment=amount>debt.minPayment;
+      this.setState({activity:[{id:'a'+Date.now(),icon:'🔨',label:'Hit '+debt.name,who,time:'now',amount},...s.activity].slice(0,8),logStage:'idle',animActor:'wrecker',animPhase:'hit',lastAmounts:{...s.lastAmounts,[debt.id]:amount},debtStreak:extraPayment?s.debtStreak+1:0});
+      if(amount>=100 && !payoff) this._shakeTimeout=setTimeout(()=>this.setState({shaking:true}),700);
+      this._seqTimeout=setTimeout(()=>{
+        if(payoff){
+          this.startTowerDown(debt.id);
+        } else {
+          this.setState(s2=>({debts:s2.debts.map(d=>d.id===debt.id?{...d,balance:Math.max(0,d.balance-amount)}:d),shaking:false}));
+        }
+        this.setState({logStage:'done',animActor:null});
+        this.captureSnapshot();
+      },1600);
+    } else if(s.logCategory==='bill'){
+      const bill=s.bills.find(b=>b.id===s.logTargetId); if(!bill) return;
+      this.setState({activity:[{id:'a'+Date.now(),icon:'🔧',label:'Paid '+bill.name,who,time:'now',amount},...s.activity].slice(0,8),logStage:'idle',animActor:'fixer',animPhase:'walk',fixerAnim:{billId:bill.id,phase:'spawn'},lastAmounts:{...s.lastAmounts,[bill.id]:amount}});
+      requestAnimationFrame(()=>this.setState({fixerAnim:{billId:bill.id,phase:'walk'}}));
+      this._seqTimeout=setTimeout(()=>{
+        this.setState(s2=>({bills:s2.bills.map(b=>b.id===bill.id?{...b,paidThisMonth:true}:b),animPhase:'flip',fixerAnim:{billId:bill.id,phase:'flip'},justLitBillId:bill.id}));
+        this.captureSnapshot();
+      },900);
+      this._seqTimeout2b=setTimeout(()=>{
+        this.setState({logStage:'done',animActor:null});
+        this._seqTimeout2=setTimeout(()=>this.setState({fixerAnim:null,justLitBillId:null}),1300);
+      },1700);
+    } else {
+      const quip=OTHER_QUIPS[Math.floor(Math.random()*OTHER_QUIPS.length)];
+      this.setState({activity:[{id:'a'+Date.now(),icon:'🛒',label:s.logNotes||'Spending',who,time:'now',amount},...s.activity].slice(0,8),logStage:'idle',animActor:'other',otherQuip:quip});
+      this._seqTimeout=setTimeout(()=>{ this.setState({logStage:'done',animActor:null}); this.captureSnapshot(); },1300);
+    }
+  };
+
+  toggleEmptyPreview=()=>this.setState(s=>({trendEmptyPreview:!s.trendEmptyPreview}));
+
+  simulateMonthReset=()=>{
+    this.setState(s=>({
+      bills:s.bills.map(b=>({...b,streak:b.paidThisMonth?b.streak+1:0,paidThisMonth:false})),
+      lastResetMonth:new Date().getMonth(),
+    }));
+    this.showToast('🌙 New month — lights reset.');
+  };
+
+  renderVals(){
+    const s=this.state;
+    const activeDebts=s.debts.filter(d=>!d.cleared);
+    const targetDebt=activeDebts.slice().sort((a,b)=>a.priority-b.priority)[0];
+    const income=this.monthlyIncome(), bills=this.monthlyBills(), mins=this.monthlyMin();
+    const totalDebt=this.totalDebt(), score=this.familyScore(), extra=this.extraCash();
+
+    const activeBalances=s.debts.filter(d=>!d.cleared).map(d=>d.balance);
+    const minBal=activeBalances.length?Math.min(...activeBalances):0, maxBal=activeBalances.length?Math.max(...activeBalances):1;
+    const balRange=Math.max(1,maxBal-minBal);
+    const debtsView=s.debts.map((d,i)=>{
+      const orig=d.originalBalance||d.balance||1;
+      const pctPaid=d.cleared?1:Math.max(0,Math.min(1,1-d.balance/orig));
+      const heightPx=d.cleared?0:Math.round(90+Math.sqrt((d.balance-minBal)/balRange)*130);
+      const remainingFrac=Math.max(0,Math.min(1,d.balance/orig));
+      const litCount=Math.round(remainingFrac*10);
+      const windows=Array.from({length:10},(_,w)=>({color:w<litCount?'#ffe0a0':'rgba(0,0,0,.4)'}));
+      const hash=d.id.split('').reduce((h,c)=>h+c.charCodeAt(0),0);
+      const windowRadius=[1,3,5][hash%3];
+      const windowGap=[4,6,8][(hash+2)%3];
+      return {
+        id:d.id,name:d.name,color:d.color,cleared:d.cleared,showBuilding:!d.cleared,
+        heightPx,windows,windowRadius,windowGap,balanceFmt:d.cleared?'PAID OFF':fmt(d.balance),
+        isTarget:!d.cleared&&targetDebt&&d.id===targetDebt.id,
+        boarded:pctPaid>=0.4&&!d.cleared,tiltedSign:pctPaid>=0.7&&!d.cleared,
+      };
+    });
+    const fixedOrder=s.debts.map(d=>d.id);
+    const SLOT=96;
+    const wreckerX = targetDebt ? fixedOrder.indexOf(targetDebt.id)*SLOT+30 : 0;
+
+    const priorityListView=activeDebts.slice().sort((a,b)=>a.priority-b.priority).map(d=>({
+      id:d.id,name:d.name,color:d.color,priority:d.priority,
+      onDragStart:this.onRowDragStart(d.id),onDrop:this.onRowDrop(d.id),
+      moveUp:()=>this.moveDebtUp(d.id),moveDown:()=>this.moveDebtDown(d.id),
+    }));
+
+    const billsView=s.bills.map((b,i)=>({id:b.id,name:b.name,amountFmt:fmt(b.amount),dotColor:BILL_PALETTE[i%BILL_PALETTE.length],hasStreak:b.streak>0,streak:b.streak,streakIcon:b.streak>=6?'🔥':b.streak>=2?'✨':'·'}));
+    const houseWindows=s.bills.map(b=>({title:b.name,color:b.paidThisMonth?'#ffd36e':'rgba(0,0,0,.4)',glow:b.paidThisMonth?'0 0 9px 3px rgba(255,211,110,.6)':'0 0 0 0 transparent',flicker:s.justLitBillId===b.id?'lightUp .9s ease-out forwards':'none'}));
+    const fixerVisible=!!s.fixerAnim;
+    const fixerX=s.fixerAnim&&s.fixerAnim.phase==='spawn'?-40:0;
+    const fixerFlipping=s.fixerAnim&&s.fixerAnim.phase==='flip';
+    const fixerFlipTransform=fixerFlipping?'rotate(-8deg)':'rotate(0deg)';
+
+    const activityView=s.activity.map(a=>({...a,amountFmt:fmt(a.amount)}));
+
+    const scoreWinning=score>50, scoreLosing=score<-50;
+    const scorePanelBg=scoreWinning?'linear-gradient(180deg,#15281f,#150c1c)':scoreLosing?'linear-gradient(180deg,#2a1815,#150c1c)':'#150c1c';
+    const scorePanelBorder=scoreWinning?'#2e6a4a':scoreLosing?'#7a4530':'#2a1c36';
+    const scoreDigitColor=scoreWinning?'#6ee0a8':scoreLosing?'#e0a06e':'#e8ddf0';
+    const scoreTagBg=scoreWinning?'#1e4a32':scoreLosing?'#4a2e1e':'#2a2a3a';
+    const scoreTagColor=scoreWinning?'#8ef0c0':scoreLosing?'#f0b08e':'#c9b8ff';
+    const scoreTagText=scoreWinning?'WINNING':scoreLosing?'LOSING':'BREAK EVEN';
+    const streakIcon=s.debtStreak>=6?'👑':s.debtStreak>=1?'⚡':'·';
+    const streakLabel=s.debtStreak>0?s.debtStreak+'-payment streak (over min. due)':'No streak yet';
+
+    const racerMessage=s.debtStreak>=6?'"On fire — six-plus extra payments in a row. Keep the wrecker busy!"':
+      s.debtStreak>=1?`"${s.debtStreak} extra payments running. Keep it up."`:
+      score<0?'"Rough month — bills outpaced income. Let\u2019s find some extra cash next."':
+      '"Break-even month. Every bit counts."';
+
+    const debtFreeMonths=Math.max(1,Math.ceil(totalDebt/Math.max(1,extra+mins)));
+    const dfd=new Date(); dfd.setMonth(dfd.getMonth()+debtFreeMonths);
+    const debtFreeDate=dfd.toLocaleString('en-US',{month:'short',year:'numeric'});
+    const totalInterestFmt=fmt(totalDebt*0.14);
+
+    const catBills=[{id:'d',type:'debt'}];
+    const logPreviewIsBill=s.logCategory==='bill';
+    let logPreviewColor='#3a2530', logPreviewHeight=50, logPreviewWindows=[], debtPreviewWindows=[];
+    if(s.logCategory==='debt'){ const d=s.debts.find(x=>x.id===s.logTargetId); if(d){ logPreviewColor=d.color; logPreviewHeight=Math.max(50,Math.min(90,34+Math.log10(d.balance+1)*20)); const orig=d.originalBalance||d.balance||1; const remFrac=Math.max(0,Math.min(1,d.balance/orig)); const litCount=Math.round(remFrac*10); debtPreviewWindows=Array.from({length:10},(_,w)=>({color:w<litCount?'#ffe0a0':'rgba(0,0,0,.4)'})); } }
+    let billSwitchOn=false;
+    if(s.logCategory==='bill'){ const b=s.bills.find(x=>x.id===s.logTargetId); if(b){ logPreviewColor='#332a1a'; logPreviewHeight=60; billSwitchOn=!!b.paidThisMonth;
+      logPreviewWindows=s.bills.map(bb=>({id:bb.id,color:bb.paidThisMonth?'#ffd36e':'#241c10',glow:bb.paidThisMonth?'0 0 9px 3px rgba(255,211,110,.65)':'none',flicker:s.justLitBillId===bb.id?'lightUp .7s ease-out forwards':'none'}));
+    } }
+    const billSwitchDotTop=billSwitchOn?'2px':'10px', billSwitchDotColor=billSwitchOn?'#ffd36e':'#6b5c46';
+
+    const logTargetOptions=s.logCategory==='debt'?activeDebts.map(d=>({id:d.id,name:d.name})):s.logCategory==='bill'?s.bills.map(b=>({id:b.id,name:b.name})):[];
+
+    const planned=parseFloat(s.logPlanned)||0, actual=parseFloat(s.logActual)||0;
+    let varianceMsg=null;
+    if(planned>0&&actual>0){ const diff=actual-planned; if(Math.abs(diff)/planned>0.15) varianceMsg=`Ran ${fmt(Math.abs(diff))} ${diff>0?'over':'under'} plan`; }
+
+    const submitLabel=s.logCategory==='debt'?(s.logMode==='charge'?'ADD CHARGE':'WRECK IT'):s.logCategory==='bill'?'PAY BILL':'LOG IT';
+    let minPaymentChipVal=0, lastAmountChipVal=0;
+    if(s.logCategory==='debt'){ const d=s.debts.find(x=>x.id===s.logTargetId); if(d) minPaymentChipVal=d.minPayment||0; }
+    if(s.logTargetId && s.lastAmounts[s.logTargetId]) lastAmountChipVal=s.lastAmounts[s.logTargetId];
+    const showMinChip=s.logCategory==='debt'&&minPaymentChipVal>0;
+    const showLastChip=lastAmountChipVal>0;
+    const stageActive=s.animActor==='wrecker'||s.animActor==='fixer'||s.animActor==='charge'||s.animActor==='other';
+    const stageHeight=stageActive?168:96;
+
+    const td=s.towerDown;
+    let tdTowerHeight=140, tdTowerColor='#e2543a', tdDebtName='';
+    if(td){
+      const d=s.debts.find(x=>x.id===td.debtId);
+      if(d){
+        tdTowerColor=d.color; tdDebtName=d.name;
+        const orig=d.originalBalance||d.balance||1;
+        tdTowerHeight=Math.round(90+Math.sqrt(Math.max(0,Math.min(1,(d.balance-minBal)/balRange)))*130);
+      }
+    }
+    const tdWindows=Array.from({length:10},(_,w)=>({color:w%3!==0?'#ffe0a0':'rgba(0,0,0,.4)'}));
+    const tdTowerAnim = td&&td.stage===1?'towerSmush .5s ease-in forwards':'none';
+    const tdWreckerAnim = td&&td.stage===0?'wreckerFall .5s cubic-bezier(.6,0,.85,.4) forwards':td&&td.stage===3?'walkOff .6s ease-in forwards':'none';
+    const tdWreckerRestBottom = td&&td.stage<=1?Math.round(tdTowerHeight):16;
+
+    const skylineBuildings=[...s.debts.filter(d=>!d.cleared).map(d=>({h:Math.min(96,20+Math.log10((d.balance||1)+1)*26),color:d.color})),...s.bills.map(b=>({h:Math.min(96,18+Math.log10((b.amount||1)+1)*16),color:'#4a3d24'}))];
+    const skylineCount=Math.max(1,skylineBuildings.length);
+    const skylineW=320/skylineCount;
+    const skylineBg=skylineBuildings.length?skylineBuildings.map((b,i)=>({x:i*skylineW+skylineW*0.15,y:120-b.h,h:b.h,w:Math.max(10,skylineW*0.7),color:b.color})):[0,1,2,3,4,5].map(i=>({x:i*54+6,y:120-(20+((i*37)%50)),h:20+((i*37)%50),w:18,color:'rgba(255,255,255,.04)'}));
+    const debtVals=s.trend.map(t=>t.debt); const maxD=Math.max(...debtVals),minD=Math.min(...debtVals);
+    const debtChartPoints=s.trend.map((t,i)=>{ const x=10+i*(300/(s.trend.length-1||1)); const y=100-((t.debt-minD)/Math.max(1,maxD-minD))*80-10; return x+','+y; }).join(' ');
+    const debtChartDots=s.trend.map((t,i)=>{ const x=10+i*(300/(s.trend.length-1||1)); const y=100-((t.debt-minD)/Math.max(1,maxD-minD))*80-10; return {x:x-3,y:y-3,rot:'rotate(45 '+x+' '+y+')'}; });
+    const scoreVals=s.trend.map(t=>t.score); const maxS=Math.max(...scoreVals,1),minS=Math.min(...scoreVals,-1);
+    const scoreChartPoints=s.trend.map((t,i)=>{ const x=10+i*(300/(s.trend.length-1||1)); const y=100-((t.score-minS)/Math.max(1,maxS-minS))*80-10; return x+','+y; }).join(' ');
+    const scoreChartDots=s.trend.map((t,i)=>{ const x=10+i*(300/(s.trend.length-1||1)); const y=100-((t.score-minS)/Math.max(1,maxS-minS))*80-10; return {cx:x,cy:y,color:t.score>0?'#6ee0a8':'#e0a06e'}; });
+    const streakBadgeMonths=Array.from({length:Math.min(s.debtStreak,12)}).map((_,i)=>({month:'#'+(i+1),icon:'⚡'}));
+    const trendMonths=s.trend.map((t,i)=>({x:10+i*(300/(s.trend.length-1||1)),label:t.month}));
+    const onTimeBills=s.bills.filter(b=>b.paidThisMonth).length;
+
+    const debtTrend=s.trend[s.trend.length-1].debt-s.trend[0].debt;
+    const debtTrendSummary=(debtTrend<0?'Debt shrinking — down ':'Debt growing — up ')+fmt(Math.abs(debtTrend))+' since '+s.trend[0].month;
+    const scoreTrendSummary=`Extra-payment streak: ${s.debtStreak} payment${s.debtStreak===1?'':'s'} over the minimum, in a row.`;
+    const dipMonth=s.trend.slice(1).reduce((min,t)=>t.score<min.score?t:min,s.trend[1]||s.trend[0]);
+    const racerTrendMessage=s.trendEmptyPreview?'"First month logged."':`"Rough patch in ${dipMonth.month} — bounced back strong since."`;
+
+    const liveSkylineView=s.addMode==='debt'?debtsView.filter(d=>!d.cleared).map(d=>({heightPx:d.heightPx*0.6,color:d.color})):billsView.map(()=>({heightPx:50,color:'#332a1a'}));
+
+    return {
+      phoneW: s.orientation==='portrait'?390:844, phoneH: s.orientation==='portrait'?844:390,
+      isDashboard:s.screen==='dashboard', isWizard:s.screen==='wizard', isLog:s.screen==='log', isTrend:s.screen==='trend', isAddScreen:s.screen==='add',
+      showTabs:['dashboard','log','trend','add'].includes(s.screen),
+      shakeAnim:s.shaking?'shakeScreen .4s ease':'none',
+      jumpWizard:this.jumpWizard,jumpDashboard:this.jumpDashboard,jumpTowerDownDemo:this.jumpTowerDownDemo,jumpLog:this.jumpLog,jumpTrend:this.jumpTrend,jumpAddDebt:this.jumpAddDebt,toggleOrientation:this.toggleOrientation,
+      scorePanelBg,scorePanelBorder,scoreDigitColor,scoreTagBg,scoreTagColor,scoreTagText,
+      scoreDisplayText:(s.scoreDisplay<0?'-':'')+fmt(Math.abs(s.scoreDisplay)).replace('$',''),
+      streakIcon,streakLabel,racerMessage,
+      incomeFmt:fmt(income),billsFmt:fmt(bills),minsFmt:fmt(mins),totalDebtFmt:fmt(totalDebt),
+      debtFreeDate,totalInterestFmt,
+      debtsView,wreckerX,priorityListView,billsView,activityView,
+      houseWindows,fixerVisible,fixerX,fixerFlipTransform,simulateMonthReset:this.simulateMonthReset,
+      captureSnapshot:this.captureSnapshot,preventDefaultFn:this.preventDefaultFn,
+      
+      newIncome:s.newIncome,newBill:s.newBill,newDebt:s.newDebt,
+      setNewIncomeName:this.setNewIncomeName,setNewIncomeOwner:this.setNewIncomeOwner,setNewIncomePayType:this.setNewIncomePayType,setNewIncomeAmount:this.setNewIncomeAmount,addIncome:this.addIncome,
+      incomeView:s.income.map(i=>({...i,amountFmt:fmt(i.amountPerCheck),remove:()=>this.removeIncome(i.id)})),
+      setupBillsView:s.bills.map(b=>({...b,amountFmt:fmt(b.amount),remove:()=>this.removeBill(b.id)})),
+      setupDebtsView:s.debts.map(d=>({...d,balanceFmt:fmt(d.balance),minFmt:fmt(d.minPayment),remove:()=>this.removeDebt(d.id)})),
+      setNewBillName:this.setNewBillName,setNewBillAmount:this.setNewBillAmount,setNewBillDueDay:this.setNewBillDueDay,setNewBillCycle:this.setNewBillCycle,addBill:this.addBill,addBillPostSetup:this.addBillPostSetup,
+      setNewDebtName:this.setNewDebtName,setNewDebtBalance:this.setNewDebtBalance,setNewDebtRate:this.setNewDebtRate,setNewDebtMin:this.setNewDebtMin,addDebt:this.addDebt,addDebtPostSetup:this.addDebtPostSetup,
+      finishSetup:this.finishSetup,
+      logStageIdle:(s.logStage==='idle'||s.logStage==='')&&!s.animActor,logStageDone:s.logStage==='done',
+      logPreviewIsBill,logPreviewNotBill:!logPreviewIsBill,logPreviewColor,logPreviewHeight:Math.round(logPreviewHeight),logPreviewWindows,debtPreviewWindows,billSwitchOn,billSwitchDotTop,billSwitchDotColor,
+      animActorIsWrecker:s.animActor==='wrecker'&&s.logCategory==='debt',animActorIsFixer:s.animActor==='fixer'&&s.logCategory==='bill',animActorIsCharge:s.animActor==='charge'&&s.logCategory==='debt',animActorIsOther:s.animActor==='other'&&s.logCategory==='other',
+      wreckerAnimCss:s.animPhase==='hit'?'windup 1.4s ease-in-out':'none',
+      buildingHitAnim:s.animPhase==='hit'?'buildingHit 1.4s ease-in-out':'none',
+      fixerFlipping:s.animPhase==='flip',
+      logModePayment:s.logMode==='payment',logModeCharge:s.logMode==='charge',isDebtCategory:s.logCategory==='debt',
+      modePaymentBg:s.logMode==='payment'?'#4a2a2a':'#160f1e',modePaymentColor:s.logMode==='payment'?'#f0a08e':'#8a7a94',
+      modeChargeBg:s.logMode==='charge'?'#3a2a14':'#160f1e',modeChargeColor:s.logMode==='charge'?'#ffcf8e':'#8a7a94',
+      setModePayment:this.setModePayment,setModeCharge:this.setModeCharge,
+      lastAmountFmt:fmt(actual||planned||0),
+      stageHeight,showMinChip,showLastChip,minPaymentChipFmt:fmt(minPaymentChipVal),lastAmountChipFmt:fmt(lastAmountChipVal),
+      applyMinChip:()=>this.applyQuickAmount(minPaymentChipVal),applyLastChip:()=>this.applyQuickAmount(lastAmountChipVal),
+      setCatDebt:this.setCatDebt,setCatBill:this.setCatBill,setCatOther:this.setCatOther,
+      catDebtBg:s.logCategory==='debt'?'#4a2a2a':'#160f1e',catDebtColor:s.logCategory==='debt'?'#f0a08e':'#8a7a94',catDebtBorder:s.logCategory==='debt'?'#c0392b':'#2a1c36',
+      catBillBg:s.logCategory==='bill'?'#2a3a4a':'#160f1e',catBillColor:s.logCategory==='bill'?'#8ec0f0':'#8a7a94',catBillBorder:s.logCategory==='bill'?'#3a6a9c':'#2a1c36',
+      catOtherBg:s.logCategory==='other'?'#2a2a3a':'#160f1e',catOtherColor:s.logCategory==='other'?'#c9b8ff':'#8a7a94',catOtherBorder:s.logCategory==='other'?'#5a4a8a':'#2a1c36',
+      showTargetSelect:s.logCategory!=='other',logTargetId:s.logTargetId,setLogTarget:this.setLogTarget,logTargetOptions,
+      logPlanned:s.logPlanned,logActual:s.logActual,setLogPlanned:this.setLogPlanned,setLogActual:this.setLogActual,
+      hasVariance:!!varianceMsg,varianceMsg,
+      logNotes:s.logNotes,setLogNotes:this.setLogNotes,
+      byMeBg:s.loggedBy==='me'?'#3a2a54':'#221530',bySpouseBg:s.loggedBy==='spouse'?'#3a2a54':'#221530',
+      setLoggedByMe:this.setLoggedByMe,setLoggedBySpouse:this.setLoggedBySpouse,
+      submitLabel,submitLog:this.submitLog,logAnother:this.logAnother,
+      racerTrendMessage,skylineBg,debtChartPoints,debtChartDots,debtTrendSummary,otherQuip:s.otherQuip||'',
+      scoreChartPoints,scoreChartDots,scoreTrendSummary,streakBadgeMonths,trendMonths,
+      trendDebtDigit:fmt(s.trend[s.trend.length-1].debt),trendScoreDigit:(s.trend[s.trend.length-1].score<0?'-':'')+fmt(Math.abs(s.trend[s.trend.length-1].score)).replace('$',''),
+      trendScoreColor:s.trend[s.trend.length-1].score>0?'#6ee0a8':'#e0a06e',
+      onTimeBillsLabel:onTimeBills+'/'+s.bills.length+' bills on time',
+      toggleEmptyPreview:this.toggleEmptyPreview,emptyPreviewLabel:s.trendEmptyPreview?'Show real trend data':'Preview: First month (empty state)',
+      trendEmptyPreview:s.trendEmptyPreview,
+      addScreenTitle:s.addMode==='debt'?'ADD DEBT TOWER':'ADD BILL BUILDING',
+      setAddDebtMode:this.setAddDebtMode,setAddBillMode:this.setAddBillMode,
+      addDebtTabBg:s.addMode==='debt'?'#4a2a2a':'#160f1e',addBillTabBg:s.addMode==='bill'?'#2a3a4a':'#160f1e',
+      isAddDebtMode:s.addMode==='debt',isAddBillMode:s.addMode==='bill',liveSkylineView,
+      towerDownActive:!!td,tdOverlayRef:this.tdRef,tdShowTower:td&&td.stage<=1,tdShowRubble:td&&td.stage>=2,tdShowWrecker:td&&td.stage<=3,tdSignVisible:td&&td.stage>=4,
+      tdTowerHeight:Math.round(tdTowerHeight),tdTowerColor,tdTowerAnim,tdWreckerAnim,tdWreckerRestBottom,tdDebtName,tdWindows,
+      toast:s.toast,toastText:s.toast,
+      tabDashColor:s.screen==='dashboard'?'#ffd36e':'rgba(255,255,255,.4)',
+      tabLogColor:s.screen==='log'?'#ffd36e':'rgba(255,255,255,.4)',
+      tabTrendColor:s.screen==='trend'?'#ffd36e':'rgba(255,255,255,.4)',
+      tabAddColor:s.screen==='add'?'#ffd36e':'rgba(255,255,255,.4)',
+    };
+  }
+}
+
+</script>
+</body>
+</html>
