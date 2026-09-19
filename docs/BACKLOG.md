@@ -24,6 +24,10 @@ _Initial entries drafted by Claude from the approved project plan, 2026-09-19._
 
 ## Future decisions (not features)
 
+- **License.** The repo is public with no LICENSE file, which means all rights reserved: people
+  can read the code but can't reuse it. That's fine for a portfolio. Decide later whether to
+  add one (e.g. MIT) and whether the sprite art should be covered by it.
+
 - **Hosting beyond the LAN** — a separate conversation covering HTTPS, secrets, backups, and
   uptime. See D-013. If this ever happens, D-012 has to be revisited as well.
 

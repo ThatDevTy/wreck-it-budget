@@ -1,6 +1,6 @@
 # Progress
 
-**Current issue:** WIB-6 · Create the repo and make the first commit
+**Current issue:** WIB-7 · Spike: design the database schema (Epic 2, starts next session)
 
 _Initial board drafted by Claude from the approved project plan, 2026-09-19._
 
@@ -34,9 +34,15 @@ An issue is Done when:
 | WIB-3 | Install Node 24 LTS and Angular CLI 22 | Task | Done |
 | WIB-4 | Install SQL Server 2025 Express and SSMS 22 | Task | Done |
 | WIB-5 | Install VS Code extensions (C# Dev Kit, Angular Language Service) | Task | Done |
-| WIB-6 | Create the repo and make the first commit | Task | In Progress |
+| WIB-6 | Create the repo, make the first commit, publish to GitHub (public) | Task | Done |
 
-## Epic 2 · SQL Schema — _not started_
+**Epic 1 complete — 2026-09-19.**
+
+## Epic 2 · SQL Schema — _next_
+
+| Key | Summary | Type | Status |
+|---|---|---|---|
+| WIB-7 | Design the database schema (tables, columns, keys, relationships) | Spike | To Do |
 Users, IncomeSources, Bills, Debts, SpendingLogEntries, MonthlySnapshots. First EF Core
 migration.
 
