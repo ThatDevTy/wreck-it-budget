@@ -91,3 +91,21 @@ no persisted user themes.
 ## D-016 · Function first, then polish, per screen
 **2026-09-19** — Each screen gets a function issue (layout, data, typography), then its own
 animation/polish issue, before work moves to the next screen.
+
+## D-017 · The minimum payment is stamped onto each debt payment
+**2026-09-24** — `SpendingLogEntries.MinPaymentAtTime` records the debt's minimum at the
+moment a payment is logged. The streak (D-007) compares against that value, never against
+`Debts.MinPayment`.
+**Why:** `Debts.MinPayment` is always *today's* figure. Raise it — as you should when a
+balance grows — and every past payment is re-judged against a bar that didn't exist when it
+was made, so earned streaks vanish silently. Lower it and unearned ones appear. The streak is
+the app's game layer; a number that rewrites its own history is worse than no number.
+This is not duplicated data: "the minimum now" and "the minimum then" are different facts,
+and the second becomes unrecoverable the moment the debt row is edited. Same reasoning as
+`Snapshots`. D-007 still holds — the streak is computed, never stored; only its input is
+frozen.
+
+## D-018 · `Snapshots`, not `MonthlySnapshots`
+**2026-09-24** — The table is append-only, with a row written on every log submission plus
+any manual Capture, so there are many rows per month. "Monthly" described how the trend
+report reads them, not what the table holds.
