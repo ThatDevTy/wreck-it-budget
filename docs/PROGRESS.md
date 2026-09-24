@@ -1,6 +1,11 @@
 # Progress
 
-**Current issue:** WIB-7 · Spike: design the database schema (Epic 2, starts next session)
+**Current issue:** WIB-7 · Spike: design the database schema — **In Progress**
+
+**Where it stands:** `Bills` and `Debts` are agreed and written up in `schema.md`.
+`IncomeSources` is next, and introduces foreign keys (`OwnerUserId` → `Users`, D-006).
+Still to draft: `IncomeSources`, `Users`, `SpendingLogEntries`, `MonthlySnapshots`, then the
+first EF Core migration. Open questions are listed at the bottom of `schema.md`.
 
 _Initial board drafted by Claude from the approved project plan, 2026-09-19._
 
@@ -38,13 +43,13 @@ An issue is Done when:
 
 **Epic 1 complete — 2026-09-19.**
 
-## Epic 2 · SQL Schema — _next_
+## Epic 2 · SQL Schema — _in progress_
 
 | Key | Summary | Type | Status |
 |---|---|---|---|
-| WIB-7 | Design the database schema (tables, columns, keys, relationships) | Spike | To Do |
+| WIB-7 | Design the database schema (tables, columns, keys, relationships) | Spike | In Progress |
 Users, IncomeSources, Bills, Debts, SpendingLogEntries, MonthlySnapshots. First EF Core
-migration.
+migration. Output lives in `schema.md`.
 
 ## Epic 3 · Backend API — _not started_
 Scaffold, auth, CRUD for income/bills/debts, priority reorder, spending log with

@@ -17,6 +17,14 @@ _Initial entries drafted by Claude from the approved project plan, 2026-09-19._
   name and sprite paths in one config file rather than scattered through templates. That
   costs nothing and makes this item cheap later (same reasoning as D-015).
 
+- **Calculated minimum payments.** `MinPayment` is a fixed amount in v1.0. Real credit cards
+  compute the minimum as a percentage of the balance with a dollar floor, so the same card
+  behaves very differently at $200 and $20,000. Doing it properly needs a percentage column,
+  a floor column, a flag for which method a given debt uses, and changes to the payoff
+  calculator — that's a new feature, not a rewrite of the as-built app, so it waits. The
+  workaround in v1.0 is real: `MinPayment` is editable, so it gets updated when the
+  statement changes.
+
 ## Maintenance
 
 - **Apply a SQL Server cumulative update.** The install is 2025 RTM (17.0.1000.7) with no
