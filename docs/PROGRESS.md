@@ -1,73 +1,47 @@
 # Progress
 
-**Current issue:** WIB-7 · Spike: design the database schema — **In Progress**
+**The board lives in Jira:**
+https://thehyberbolictimechamber.atlassian.net/jira/software/projects/WIB/boards/2
 
-**Where it stands:** all six tables are agreed and written up in `schema.md` — `Users`,
-`IncomeSources`, `Bills`, `Debts`, `SpendingLogEntries`, `Snapshots`. Two minor open
-questions remain at the bottom of that file, neither blocking. The design work of WIB-7 is
-done; the first EF Core migration closes out Epic 2.
-
-_Initial board drafted by Claude from the approved project plan, 2026-09-19._
+Status, workflow and the backlog are tracked there (D-019). This file is a pointer and a
+short summary, not a second board — if the two disagree, Jira is right about *status* and
+the repo is right about *reasoning*.
 
 ---
 
-## How this board works
+## Where things stand
 
-- **Keys:** `WIB-n`, numbered sequentially across the whole project.
-- **Epics:** one per stage. An epic's issues are created when the epic starts, not in advance.
-- **Types:** Story (a user-facing feature) · Task (technical work) · Bug (a defect found after
-  Done) · Spike (time-boxed research whose output is a decision).
-- **Workflow:** To Do → In Progress → In Review → Done, plus Blocked.
-- **Points:** Fibonacci 1 / 2 / 3 / 5 / 8. Anything bigger gets split.
+**Epic 1 · Environment Setup — complete (2026-09-19).** Git, .NET 10 SDK 10.0.401, Node 24 +
+Angular CLI 22, SQL Server 2025 Express (`localhost\SQLEXPRESS`) + SSMS 22, VS Code
+extensions, repo published at github.com/ThatDevTy/wreck-it-budget.
 
-### Definition of Done
-An issue is Done when:
-- [ ] every acceptance criterion is checked
-- [ ] the test plan was run by me, with the output shared
-- [ ] the diff was reviewed
-- [ ] it's committed with a message I wrote
-- [ ] this board is updated
+**Epic 2 · SQL Schema — in progress (WIB-7).** All six tables are agreed and documented in
+[`schema.md`](schema.md) with a written rationale for every non-obvious column. Nothing is
+open. What remains is the Definition of Done's test plan: run the DDL against a scratch
+database and confirm the constraints reject what they should — and accept what they should,
+a debt paid down to exactly 0 being the case that matters.
 
----
-
-## Epic 1 · Environment Setup
-
-| Key | Summary | Type | Status |
-|---|---|---|---|
-| WIB-1 | Install Git and configure identity | Task | Done |
-| WIB-2 | Install .NET 10 SDK (10.0.401) | Task | Done |
-| WIB-3 | Install Node 24 LTS and Angular CLI 22 | Task | Done |
-| WIB-4 | Install SQL Server 2025 Express and SSMS 22 | Task | Done |
-| WIB-5 | Install VS Code extensions (C# Dev Kit, Angular Language Service) | Task | Done |
-| WIB-6 | Create the repo, make the first commit, publish to GitHub (public) | Task | Done |
-
-**Epic 1 complete — 2026-09-19.**
-
-## Epic 2 · SQL Schema — _in progress_
-
-| Key | Summary | Type | Status |
-|---|---|---|---|
-| WIB-7 | Design the database schema (tables, columns, keys, relationships) | Spike | In Progress |
-Users, IncomeSources, Bills, Debts, SpendingLogEntries, Snapshots. First EF Core
-migration. Output lives in `schema.md`.
-
-## Epic 3 · Backend API — _not started_
-Scaffold, auth, CRUD for income/bills/debts, priority reorder, spending log with
-auto-snapshot, summary, payoff calculator, trend.
-
-## Epic 4 · Frontend — _not started_
-Scaffold and global styles, login and auth, Setup, Dashboard (score, towers, Bill House),
-Log Entry, Trend Report, damage layer Spike, Tower Down sequence.
-
-## Epic 5 · Testing — _not started_
-
-## Epic 6 · QA — _not started_
-
-## Epic 7 · LAN Deployment — _not started_
-
-## Epic 8 · Maintenance — _not started_
+**Epic 3 · Backend API — next (WIB-8).** Scaffold the project, write the six entity classes
+from `schema.md`, generate the first EF Core migration. The migration was originally planned
+under Epic 2; it moved here so the scaffold, the entities and the migration stay one
+connected piece of work.
 
 ---
 
-## Blocked
-_Nothing._
+## How the work runs
+
+- **The user writes the code.** Claude designs, explains, reviews and unblocks.
+- One exception, agreed 2026-09-25: Claude writes the **styling and animation layer** — the
+  CSS tokens, keyframes and SVG transcribed from the design reference. It is very high
+  volume and close to zero learning, and offloading it is the cheapest way to buy calendar
+  back without hollowing out the git history.
+- **Definition of Done:** every acceptance criterion checked · the test plan run, with output
+  shared · the diff reviewed · committed with a message the user wrote · the Jira issue moved.
+
+---
+
+## Documentation in this repo
+
+- [`schema.md`](schema.md) — the six tables and why each non-obvious column is the way it is
+- [`DECISIONS.md`](DECISIONS.md) — D-001 onward, the decisions that shape the project
+- [`handoff/`](handoff/) — the original design brief and visual spec

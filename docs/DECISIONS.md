@@ -109,3 +109,69 @@ frozen.
 **2026-09-24** — The table is append-only, with a row written on every log submission plus
 any manual Capture, so there are many rows per month. "Monthly" described how the trend
 report reads them, not what the table holds.
+
+## D-019 · Jira owns status. The repo owns reasoning.
+**2026-09-24** — Issue tracking moves to a Jira project (key `WIB`, so the existing WIB-n
+references stay correct). `PROGRESS.md` shrinks to a pointer and `BACKLOG.md` folds into the
+Jira backlog. **`DECISIONS.md` and `schema.md` stay in the repo.**
+**Why:** decision records belong next to the code they constrain — `schema.md` cites D-003,
+D-006, D-007 and D-017 inline, and those links only work if both files live together. They're
+also versioned and diffable, so a superseded decision shows its history. And this repo is
+public and doubles as a portfolio: reasoning visible in the repo is reasoning a reader
+actually finds, where a ticket tracker behind a login is not. Keeping architecture decision
+records in-repo is the common convention, not a workaround.
+**Also:** a free Atlassian site can be deactivated after prolonged inactivity. The repo is on
+disk and on GitHub.
+
+## D-020 · Two releases: `0.5 Tracker` and `1.0`. The 10/1 target is dropped.
+**2026-09-25** — v1.0 was going to be "in production by 1 October." That is not achievable and
+has been replaced with two dated releases in Jira:
+
+- **`0.5 Tracker` — due 8 November.** A usable budget tracker: enter income, bills and debts,
+  log spending, see a true Family Score. No auth, no characters, no animation, no charts.
+  ~57 hours of work.
+- **`1.0` — due 31 January 2027.** The full arcade experience, LAN-deployed. ~183 hours total.
+
+**Why:** the remaining work is roughly 183 hours at a learning pace, against a stated capacity
+of one to two hours nightly — about ten hours a week. Six days was never going to be 10% of
+it. The estimate assumes no prior C#, TypeScript or Angular, and that the user writes the
+code (see D-021 for the one exception). It should compress as fluency arrives, so mid-January
+is a realistic stretch on 1.0, but the committed date is the honest one.
+
+**The two things most likely to move these dates**, flagged so they are not a surprise: auth
+(WIB-31, WIB-32), which is conceptually heavy and where beginners lose a week without
+noticing; and the payoff calculator (WIB-36), the only genuinely algorithmic piece.
+
+**Revisit** after the `0.5 Tracker` release. Actual velocity over six weeks beats any estimate
+made before a line of C# exists.
+
+## D-021 · Claude writes the styling and animation layer. The user writes everything else.
+**2026-09-25** — The CSS token file, keyframe animations, sprite-sheet handling and inline SVG
+transcribed from the design reference are written by Claude. All C#, all Angular component
+logic, all API code and all schema work stay with the user.
+
+**Why:** the arcade layer is hundreds of lines of exact hex values and timing functions
+transcribed from a spec that already states them. It is enormous in volume and close to zero
+in learning — hours spent copying `#ffd36e` teach nothing about either stack. Offloading it
+buys back most of the calendar without hollowing out the git history, which is the thing this
+project exists to produce. Handing over domain logic would do the opposite.
+
+**Boundary:** Claude writes the animation *definitions*; the user wires them to the events
+that trigger them. That wiring is real Angular work and stays theirs.
+
+## D-022 · Jira board conventions
+**2026-09-25** — How the board is arranged, recorded so it stays consistent:
+
+- **Issues are created before epics.** Epics consume keys from the same sequence, so creating
+  them first would have pushed WIB-1 to WIB-9. Work items are WIB-1 to WIB-8 and WIB-23
+  onward; the eight epics occupy WIB-9 to WIB-16 purely because they were created second.
+  **Jira keys cannot be renumbered or reused** — they are assigned on creation and permanent.
+- **Board order comes from rank, not key.** Every issue is ranked in execution order, so the
+  board reads top to bottom as the plan regardless of its number.
+- **Dependencies are `blocks` links**, not conventions in prose. 52 of them describe the real
+  critical path.
+- **Story points are Fibonacci and sized for a learner**, not for an experienced developer.
+  Hour estimates appear at the bottom of each description, because hours are what actually
+  plan an evening.
+- **Every card carries the same four sections:** context, acceptance criteria, test plan, and
+  what is explicitly *not* in the issue.

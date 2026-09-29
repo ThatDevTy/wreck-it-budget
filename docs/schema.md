@@ -489,7 +489,7 @@ var date = new DateTime(year, month, day);
 ```
 
 The UI should also **flag it at entry** rather than silently accepting it: when someone picks
-29, 30, or 31, show a note that this bill will land on the last day in shorter months. The
+29, 30, or 31, show a note that this bill will land on the last day in short`er months. The
 clamp is the behavior; the note is so it isn't a surprise.
 
 ### Payment streaks
