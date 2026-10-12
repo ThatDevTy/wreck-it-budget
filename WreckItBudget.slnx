@@ -1,0 +1,5 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/WreckItBudget.Api/WreckItBudget.Api.csproj" />
+  </Folder>
+</Solution>

@@ -15,11 +15,11 @@ the repo is right about *reasoning*.
 Angular CLI 22, SQL Server 2025 Express (`localhost\SQLEXPRESS`) + SSMS 22, VS Code
 extensions, repo published at github.com/ThatDevTy/wreck-it-budget.
 
-**Epic 2 · SQL Schema — in progress (WIB-7).** All six tables are agreed and documented in
-[`schema.md`](schema.md) with a written rationale for every non-obvious column. Nothing is
-open. What remains is the Definition of Done's test plan: run the DDL against a scratch
-database and confirm the constraints reject what they should — and accept what they should,
-a debt paid down to exactly 0 being the case that matters.
+**Epic 2 · SQL Schema — complete (2026-09-29).** All six tables are agreed and documented in
+[`schema.md`](schema.md) with a written rationale for every non-obvious column, and the DDL
+has been run against a scratch database. Eleven tests passed: nine constraint violations
+rejected with zero rows written, and both positive cases accepted — a debt paid down to
+exactly 0 and cleared, and a debt carrying a $0 minimum payment.
 
 **Epic 3 · Backend API — next (WIB-8).** Scaffold the project, write the six entity classes
 from `schema.md`, generate the first EF Core migration. The migration was originally planned
