@@ -1,0 +1,450 @@
+/* ============================================================================
+   Wreck-It Budget - design tokens
+   ----------------------------------------------------------------------------
+   WIB-27 / D-021. Transcribed from docs/handoff/README.md ("Global Visual
+   Language" plus the per-screen specs), with gaps filled from the working
+   prototype at design-ref/Wreck-It Budget.dc.html.
+
+   Rules this file follows:
+   - Values are verbatim from the spec. Nothing here was rounded or improved.
+   - Where the README gives a range (border 1-2px, radius 9-10px, CTA 11-12px),
+     both ends get their own token rather than one being picked.
+   - D-015: one theme. No prefers-color-scheme block, no runtime theming,
+     no theme class. The app has exactly one look.
+   - Keyframes live here too. They are transcription from the same spec, and a
+     component should never redefine scanlineMove or shakeScreen locally.
+   ========================================================================== */
+
+:root {
+  /* ==========================================================================
+     SURFACES
+     Dark purple-black stack. "app" is the shell behind the cabinet, "screen"
+     is the CRT area, and cards sit on top of the screen. The -alt surface is
+     one step lighter and is what rows, inputs and nested panels use so they
+     read as inset against a card.
+     ====================================================================== */
+  --surface-app: #0a0710;                /* app shell background */
+  --surface-screen: #100a16;             /* screen background */
+  --surface-card: #150c1c;               /* card / panel surface */
+  --surface-card-alt: #160f1e;           /* nested rows, list items */
+  --surface-input: var(--surface-card-alt);
+  --surface-row: var(--surface-card-alt);
+
+  /* Header bar: a vertical gradient that fades into the screen background, so
+     the bar has no visible seam other than its bottom border. */
+  --surface-header-top: #1c1024;
+  --surface-header-bottom: #100a16;
+  --gradient-header: linear-gradient(180deg, #1c1024, #100a16);
+
+  /* Debt-tower skyline well. The towers stand on this, so it is lighter at the
+     bottom to read as ground haze. */
+  --surface-skyline-top: #181022;
+  --surface-skyline-bottom: #221530;
+  --gradient-skyline: linear-gradient(180deg, #181022, #221530);
+
+  --surface-pill: #221530;               /* quick-fill chips, arrow buttons */
+  --surface-nav: #1c1428;                /* secondary buttons, bottom nav */
+  --surface-toast: #1c1428;              /* bottom-anchored toast */
+  --surface-bubble: #1b2530;             /* Racer-Guide speech bubble */
+  --surface-window-dark: #241c10;        /* unlit bill-house window */
+  --surface-warning: #2a2312;            /* variance notice background */
+
+  /* Family Score panel, driven by state. Winning/losing are gradients that
+     tint the top of the card and settle back to --surface-card; break-even is
+     the plain card, so the neutral state is genuinely neutral. The score can be
+     negative and is shown that way, so "losing" is a colour, not a hidden
+     state and never a clamp. */
+  --gradient-score-winning: linear-gradient(180deg, #15281f, #150c1c);
+  --gradient-score-losing: linear-gradient(180deg, #2a1815, #150c1c);
+  --surface-score-neutral: var(--surface-card);
+  --surface-score-tag-winning: #1e4a32;
+  --surface-score-tag-losing: #4a2e1e;
+  --surface-score-tag-neutral: #2a2a3a;
+
+  /* Trend chart panels. Two separate charts, each with its own theme. */
+  --surface-chart-debt-top: #241318;
+  --surface-chart-debt-bottom: #150c1c;
+  --gradient-chart-debt: linear-gradient(180deg, #241318, #150c1c);
+  --surface-chart-score-top: #15281f;
+  --surface-chart-score-bottom: #150c1c;
+  --gradient-chart-score: linear-gradient(180deg, #15281f, #150c1c);
+
+  /* Setup "add item" buttons and Log-Entry category buttons: a darkened tint
+     of the section's own role colour, with a lighter border of the same hue. */
+  --surface-action-income: #2a4a3a;
+  --surface-action-bills: #2a3a4a;
+  --surface-action-debt: #4a2a2a;
+  --surface-action-other: #2a2a3a;
+
+  /* ==========================================================================
+     BORDERS
+     The README gives "1-2px solid #2a1c36", so both widths are tokens: 1px for
+     inputs and list rows, 2px for cards and anything that should feel framed.
+     ====================================================================== */
+  --border-width-thin: 1px;
+  --border-width-thick: 2px;
+
+  --border-default: #2a1c36;             /* card, input, row border */
+  --border-strong: #2f1f3a;              /* header bar bottom border (2px) */
+  --border-accent: #3a2a54;              /* purple: nav, chips, secondary UI */
+  --border-cta: #7a2419;                 /* dark red under the primary CTA */
+
+  --border-score-winning: #2e6a4a;
+  --border-score-losing: #7a4530;
+  --border-score-neutral: var(--border-default);
+
+  --border-chart-debt: #6a3226;
+  --border-chart-score: #2e6a4a;
+
+  --border-action-income: #3a6a52;
+  --border-action-bills: #3a5a72;
+  --border-action-debt: #6a3a3a;
+  --border-action-other: #5a4a8a;
+
+  /* Selected category buttons on Log Entry get a brighter border. */
+  --border-active-debt: #c0392b;
+  --border-active-bills: #3a6a9c;
+  --border-active-other: #5a4a8a;
+
+  /* ==========================================================================
+     RADII
+     The README gives "9-10px" for cards, so both exist. 7px is the input and
+     small-button radius. 2px is a pixel-art dot/window corner: just enough to
+     stop a hard square without looking rounded.
+     ====================================================================== */
+  --radius-pixel: 2px;                   /* colour dots, tower windows */
+  --radius-xs: 4px;                      /* tiny up/down arrow buttons */
+  --radius-sm: 6px;                      /* list rows */
+  --radius-md: 7px;                      /* inputs, add buttons */
+  --radius-lg: 8px;                      /* primary CTA, toast */
+  --radius-card: 9px;                    /* card, low end of README range */
+  --radius-card-lg: 10px;                /* card, high end of README range */
+  --radius-pill: 20px;                   /* quick-fill chips */
+  --radius-round: 50%;                   /* marquee dots */
+
+  /* ==========================================================================
+     TEXT COLOURS
+     One solid primary; everything secondary is white at reduced alpha so it
+     sits correctly on any of the surfaces above without needing a variant per
+     background. The README gives the muted range as .4 to .6.
+     ====================================================================== */
+  --text-primary: #e8ddf0;
+  --text-value: #fff;                    /* numeric stat values, input text */
+  --text-on-cta: #fff;
+
+  --text-secondary: rgba(255, 255, 255, .6);   /* high end of README range */
+  --text-muted: rgba(255, 255, 255, .5);
+  --text-muted-strong: rgba(255, 255, 255, .45);
+  --text-faint: rgba(255, 255, 255, .4);       /* low end of README range */
+  --text-dim: rgba(255, 255, 255, .35);
+  --text-inactive: #8a7a94;              /* unselected category button label */
+
+  --text-score-winning: #6ee0a8;
+  --text-score-losing: #e0a06e;
+  --text-score-neutral: var(--text-primary);
+  --text-score-tag-winning: #8ef0c0;
+  --text-score-tag-losing: #f0b08e;
+  --text-score-tag-neutral: #c9b8ff;
+
+  /* ==========================================================================
+     ROLE PALETTE
+     Named by job, not by hue, because the job is the thing that is stable:
+     income is green today, and a component that asks for "income" keeps
+     working if green ever moves. The raw colour tokens sit underneath so the
+     whole mapping is visible in one place.
+     ====================================================================== */
+  --color-brand: var(--color-gold);            /* header title, app identity */
+  --color-streak: var(--color-gold);           /* winning streak */
+
+  --color-income: var(--color-green);          /* income, positive states */
+  --color-income-bright: var(--color-green-bright);
+
+  --color-bills: var(--color-blue);            /* bills */
+  --color-bills-bright: var(--color-blue-soft);
+
+  --color-debt: var(--color-red);              /* debt, danger */
+  --color-debt-bright: var(--color-red-soft);
+  --color-debt-accent: var(--color-peach);     /* debt section accent square */
+  --color-debt-cta: var(--color-red-deep);     /* "WRECK IT", "LOG SPENDING" */
+  --color-debt-cta-shadow: var(--color-red-shadow);
+
+  --color-winning: var(--color-green);
+  --color-losing: var(--color-orange);
+  --color-neutral: var(--text-primary);
+
+  --color-nav: var(--color-purple);            /* nav / secondary UI accents */
+  --color-nav-surface: var(--color-purple-deep);
+
+  --color-warning: var(--color-amber);         /* variance notice, informational */
+
+  --color-bill-lit: var(--color-gold);         /* a paid bill's window */
+  --color-amount-negative: #ff8a7a;            /* "-$amount" in activity feed */
+
+  /* Marquee dots in the header bar: three fixed colours, red / gold / green. */
+  --color-marquee-1: #ff5a4d;
+  --color-marquee-2: var(--color-gold);
+  --color-marquee-3: var(--color-green);
+
+  /* ---- raw colours, referenced by the roles above ----------------------- */
+  --color-gold: #ffd36e;
+  --color-gold-bright: #ffe0a0;
+  --color-gold-soft: #ffcf8e;
+  --color-gold-flash: #fff3c4;           /* peak of the lightUp flash */
+
+  --color-green: #6ee0a8;
+  --color-green-bright: #8ef0c0;
+
+  --color-red: #e2543a;
+  --color-red-soft: #ff9a7a;
+  --color-red-deep: #c0392b;             /* CTA fill */
+  --color-red-shadow: #7a2419;           /* CTA hard drop-shadow / border */
+
+  --color-blue: #3a8fe2;
+  --color-blue-soft: #8ec0f0;
+
+  --color-purple: #c9b8ff;
+  --color-purple-deep: #3a2a54;
+
+  --color-peach: #f0a08e;
+  --color-peach-soft: #f0b08e;
+  --color-orange: #e0a06e;               /* losing-state score digits */
+  --color-amber: #e8b86e;                /* variance / informational amber */
+
+  /* ==========================================================================
+     DEBT TOWER PALETTE
+     Six colours assigned round-robin per debt, purely for identity - no
+     encoded meaning, so none of these may be read as "good" or "bad".
+     Individually numbered and ZERO-BASED because the frontend indexes them as
+     TOWER_PALETTE[colorIndex], and ColorIndex is server-owned (0 to 5).
+     ====================================================================== */
+  --tower-0: #e2543a;
+  --tower-1: #3a8fe2;
+  --tower-2: #e2b23a;
+  --tower-3: #8f5ae2;
+  --tower-4: #3ae2b2;
+  --tower-5: #e23a8f;
+
+  /* ==========================================================================
+     BILL ACCENT PALETTE
+     Five colours, same zero-based indexing contract as the towers.
+     ====================================================================== */
+  --bill-0: #ffd36e;
+  --bill-1: #8fe2c7;
+  --bill-2: #e28f8f;
+  --bill-3: #8fb2e2;
+  --bill-4: #c9a8f0;
+
+  /* ==========================================================================
+     TYPOGRAPHY
+     Two stacks and nothing else. Press Start 2P is a pixel font with very wide
+     glyphs and no lowercase rhythm - it is for headlines, score digits, CTAs
+     and retro labels only. Body copy, inputs and secondary text use system-ui,
+     which stays readable at 8-12px where the pixel font would not.
+     ====================================================================== */
+  --font-display: 'Press Start 2P', cursive;
+  --font-body: system-ui, sans-serif;
+
+  /* Press Start 2P sizes. Named by job, because each is spec'd per element. */
+  --size-display-score: 34px;            /* Family Score digits */
+  --size-display-xl: 26px;
+  --size-display-slam: 22px;             /* "DEBT DEFEATED" text slam */
+  --size-display-lg: 18px;               /* trend chart digit readout */
+  --size-display-title: 12px;            /* header bar title */
+  --size-display-cta: 12px;              /* primary CTA, high end of 11-12px */
+  --size-display-cta-sm: 11px;           /* primary CTA, low end of 11-12px */
+  --size-display-button: 10px;           /* "ADD INCOME" and siblings */
+  --size-display-label: 9px;             /* setup card section labels */
+  --size-display-micro: 8px;             /* priority numbers, field labels */
+
+  /* system-ui sizes. */
+  --size-body-xl: 16px;
+  --size-body-lg: 14px;
+  --size-stat-value: 13px;               /* secondary stat values */
+  --size-body: 12px;                     /* inputs, default body copy */
+  --size-body-sm: 11px;                  /* secondary buttons, high end of 10-11px */
+  --size-body-amount: 10.5px;            /* activity-feed amounts */
+  --size-body-xs: 10px;                  /* subtitles, low end of 10-11px */
+  --size-body-label: 9.5px;
+  --size-body-xxs: 9px;
+  --size-body-caption: 8.5px;            /* score formula caption, meta lines */
+  --size-body-micro: 8px;
+
+  --tracking-title: 1px;                 /* header title, FINISH SETUP */
+  --tracking-button: .5px;               /* ADD INCOME / ADD BILL / ADD DEBT */
+
+  /* ==========================================================================
+     SPACING
+     The prototype's layout runs on a small set of steps; these are the ones
+     that repeat. 10px is the default padding for inputs and small panels.
+     ====================================================================== */
+  --space-1: 3px;
+  --space-2: 4px;
+  --space-3: 6px;
+  --space-4: 7px;
+  --space-5: 8px;
+  --space-6: 10px;
+  --space-7: 12px;
+  --space-8: 14px;
+  --space-9: 16px;
+
+  --space-card-padding: 12px;            /* setup cards */
+  --space-row-padding-y: 8px;            /* list rows: 8px by 10px */
+  --space-row-padding-x: 10px;
+  --space-input-padding: 10px;
+  --space-field-gap: 8px;                /* between stacked / paired fields */
+  --space-header-padding: 14px 16px 10px;
+
+  /* ==========================================================================
+     SHADOWS AND GLOWS
+     Two distinct kinds, and mixing them up is what kills the arcade feel:
+     (1) hard offset shadows with zero blur, which make a button look like a
+     physical cabinet key, and (2) blurred coloured glows, which make text and
+     lights look like they are emitting rather than merely lit.
+     ====================================================================== */
+  --shadow-cta: 0 3px 0 var(--color-red-shadow);        /* low end of 3-4px */
+  --shadow-cta-deep: 0 4px 0 var(--color-red-shadow);   /* high end of 3-4px */
+  --shadow-cta-glow: 0 0 14px rgba(192, 57, 43, .55);   /* FINISH SETUP */
+  --shadow-toast: 0 6px 16px rgba(0, 0, 0, .4);
+
+  /* Inset rims on tower / bill windows - a highlight inside the cell edge. */
+  --shadow-window-rim: inset 0 0 0 2px rgba(255, 255, 255, .1);
+  --shadow-window-rim-strong: inset 0 0 0 2px rgba(255, 255, 255, .15);
+  --shadow-window-rim-thin: inset 0 0 0 1px rgba(255, 255, 255, .12);
+
+  /* Bill-house windows. "lit" is the resting state of a paid bill; "flash" is
+     the bright peak partway through lightUp, not an end state. */
+  --shadow-bill-lit: 0 0 9px 3px rgba(255, 211, 110, .65);
+  --shadow-bill-lit-soft: 0 0 9px 3px rgba(255, 211, 110, .6);
+  --shadow-bill-flash: 0 0 14px 5px rgba(255, 227, 150, .95);
+
+  /* Setup card header squares: a 9x9 pixel square with a matching 6px glow. */
+  --shadow-accent-income: 0 0 6px rgba(142, 240, 192, .7);
+  --shadow-accent-bills: 0 0 6px rgba(142, 192, 240, .7);
+  --shadow-accent-debt: 0 0 6px rgba(240, 160, 142, .7);
+
+  /* Text glows. */
+  --shadow-text-brand: 0 0 8px rgba(255, 211, 110, .6);   /* header title */
+  --shadow-text-gold: 0 0 6px rgba(255, 211, 110, .7);
+  --shadow-text-gold-lg: 0 0 12px rgba(255, 207, 142, .7);
+  --shadow-text-income: 0 0 6px rgba(142, 240, 192, .5);
+  --shadow-text-bills: 0 0 6px rgba(142, 192, 240, .5);
+  --shadow-text-debt: 0 0 6px rgba(240, 160, 142, .5);
+  --shadow-text-slam: 0 0 16px rgba(255, 90, 77, .7);     /* DEBT DEFEATED */
+  --shadow-text-slam-soft: 0 0 10px rgba(255, 90, 77, .5);
+
+  /* The score digits glow in their own state colour, which is only known at
+     runtime, so only the blur radius can be a token. Use as:
+     text-shadow: 0 0 var(--glow-blur-score) <state colour>; */
+  --glow-blur-score: 12px;               /* dashboard Family Score digits */
+  --glow-blur-trend: 10px;               /* trend chart digit readout */
+
+  /* ==========================================================================
+     CRT SCANLINE OVERLAY
+     1px lines every 4px over the whole screen, blended as overlay so it darkens
+     content without washing it out, and scrolled so it never reads as a static
+     texture. Sits above content with pointer-events: none.
+     ====================================================================== */
+  --crt-line-color: rgba(255, 255, 255, .05);
+  --crt-line-thickness: 1px;
+  --crt-line-period: 4px;
+  --crt-blend-mode: overlay;
+  --crt-z-index: 50;
+  --crt-overlay: repeating-linear-gradient(
+    0deg,
+    rgba(255, 255, 255, .05) 0px,
+    rgba(255, 255, 255, .05) 1px,
+    transparent 1px,
+    transparent 4px
+  );
+
+  /* ==========================================================================
+     ANIMATION
+     Durations and easings for the named keyframes below. The scanline scroll
+     distance is 8px against a 4px gradient period - two full line cycles per
+     loop, which is why the scroll looks continuous rather than jumping.
+     ====================================================================== */
+  --anim-scanline-duration: 0.6s;
+  --anim-scanline-ease: linear;
+  --anim-scanline-distance: 8px;
+
+  --anim-marquee-duration: 1.1s;         /* each dot's opacity blink */
+  --anim-marquee-stagger: 0.2s;          /* dots offset 0.2s apart: 0 / .2 / .4 */
+
+  --anim-cursor-duration: 1s;            /* pixel cursor after "PLAYER SETUP" */
+  --anim-cursor-ease: steps(2);          /* hard on/off, no fade */
+
+  --anim-flame-duration: 1.4s;           /* streak icon pulse */
+  --anim-flame-duration-slow: 1.6s;      /* slower pulse variant */
+
+  --anim-light-up-duration: 0.9s;        /* bill window on the dashboard house */
+  --anim-light-up-duration-fast: 0.7s;   /* bill window in the log preview */
+  --anim-light-up-ease: ease-out;
+
+  --anim-shake-duration: 0.4s;           /* payments >= $100, and every payoff */
+  --anim-shake-ease: ease;
+  --anim-shake-offset: 4px;
+
+  --anim-toast-dismiss: 3000ms;          /* toast auto-dismiss */
+
+  --ease-linear: linear;
+  --ease-out: ease-out;
+}
+
+/* ============================================================================
+   KEYFRAMES
+   Here rather than in components for the same reason the tokens are: they are
+   transcribed from the spec, and six components each writing their own
+   shakeScreen is six chances to get it slightly different.
+   ========================================================================== */
+
+/* CRT scanline scroll. Moves the repeating gradient's background-position by
+   two line periods, so the loop is seamless. Pair with --anim-scanline-*. */
+@keyframes scanlineMove {
+  0% { background-position: 0 0; }
+  100% { background-position: 0 8px; }
+}
+
+/* Header marquee dot blink. Never goes fully dark (.35, not 0) - the dots are
+   cabinet bulbs idling, not an alert. */
+@keyframes blinkMarquee {
+  0%, 100% { opacity: 1; }
+  50% { opacity: .35; }
+}
+
+/* Pixel cursor blink after the "PLAYER SETUP" title. Drive it with
+   --anim-cursor-ease (steps(2)) so it snaps on and off like a terminal caret
+   instead of fading.
+   NOTE: the README specifies "steps(2) 1s blink"; the prototype implements the
+   cursor by reusing flamePulse at steps(2), which scales rather than blinks.
+   This keyframe follows the README's wording. */
+@keyframes cursorBlink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+/* Streak icon pulse. Scale only, no colour change, so it reads as alive
+   rather than as a status change. */
+@keyframes flamePulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.18); }
+}
+
+/* A bill window turning on when that bill is paid. Overshoots to a near-white
+   flash at 45% and settles on gold. Runs forwards, and only ever goes dark to
+   lit: the Fixer never turns a light off, and the cycle reset is a silent
+   state change, not this animation played backwards. */
+@keyframes lightUp {
+  0% { background: #241c10; box-shadow: none; }
+  45% { background: #fff3c4; box-shadow: 0 0 14px 5px rgba(255, 227, 150, .95); }
+  100% { background: #ffd36e; box-shadow: 0 0 9px 3px rgba(255, 211, 110, .65); }
+}
+
+/* Whole-screen shake on payments of $100 or more, and always on a debt payoff.
+   Decaying 4px to 3px offsets, so it settles instead of stopping dead. */
+@keyframes shakeScreen {
+  0%, 100% { transform: translate(0, 0); }
+  20% { transform: translate(-4px, 2px); }
+  40% { transform: translate(4px, -2px); }
+  60% { transform: translate(-3px, 1px); }
+  80% { transform: translate(3px, -1px); }
+}

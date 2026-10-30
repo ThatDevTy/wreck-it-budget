@@ -175,3 +175,44 @@ that trigger them. That wiring is real Angular work and stays theirs.
   plan an evening.
 - **Every card carries the same four sections:** context, acceptance criteria, test plan, and
   what is explicitly *not* in the issue.
+
+## D-023 · Controllers on the backend, standalone components on the frontend
+**2026-10-15 / 2026-10-30** — ASP.NET Core endpoints are written as **controller classes**,
+not minimal APIs. Angular components are **standalone**, not declared in NgModules.
+
+**Why controllers:** the owner's workplace uses them, so every hour spent in that style
+compounds into something read every day. Minimal APIs are less ceremony and would have been
+the lighter choice for a project this size, but matching the real target won.
+
+**Why standalone:** it is what Angular CLI 22 produces by default, so NgModules would mean
+opting out of the tooling's own direction. It is also one fewer concept to learn — an
+NgModule exists purely as bookkeeping, registering components somewhere other than the file
+they live in. And it fails better: a missing standalone import points at the component's own
+file, where a missing NgModule declaration surfaces as an unrecognised element in a template.
+
+**Note these two answers point opposite ways on purpose.** Controllers and minimal APIs are
+both live, supported, equal choices in ASP.NET Core, so matching the workplace is free.
+NgModules are a legacy path Angular is actively migrating away from, so learning them first
+would mean learning the thing you later convert *away* from. Standalone to NgModules is also
+the easier direction to travel, because you already understand what the module was doing.
+
+**Revisit if:** the owner lands somewhere whose Angular codebase is NgModule-based and
+wants the practice. The conversion is mechanical.
+
+## D-024 · Angular project conventions
+**2026-10-30** — Three decisions taken before the first service was written:
+
+**The API base URL lives in Angular `environment` files**, not hardcoded and not in a shared
+constant. `ng generate environments` creates `environment.ts` and
+`environment.production.ts`; the CLI swaps the file at production build time. **Why:** WIB-55
+deploys to the LAN on a different address, and a committed constant would have to be edited
+to deploy and remembered back afterwards — exactly the mistake environments exist to prevent.
+
+**Interfaces live in one shared `src/app/models/` folder**, mirroring the API's C# `Models/`
+folder rather than sitting beside each service. **Why:** these types exist only to mirror the
+API contract, so when the C# changes the TypeScript change should be findable in one step.
+Matching names on both sides (`IncomeResponse` ↔ `IncomeResponse`) makes drift obvious.
+
+**No component calls `HttpClient` directly.** One service per resource, and every screen goes
+through it. **Why:** otherwise the URL for fetching debts ends up written in four components
+and changing it means finding all four.
